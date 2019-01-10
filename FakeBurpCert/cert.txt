@@ -1,0 +1,4 @@
+#CN=www\.example\.com,	x509.info.serialNumber	11223344
+#CN=www\.example\.com,	x509.info.validity	yyyy/MM/dd	2017/01/01	2027/12/31
+#CN=www\.example\.com,	x509.info.extensions.AuthorityInfoAccess.ocsp	http://www.example.com:8888/
+CN=www\.example\.com,	x509.info.subject	CN=www.example.com, OU=piyo, O=fuga, C=hoge

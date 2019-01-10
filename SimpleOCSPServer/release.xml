@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SimpleOCSPServer" default="release" basedir="." >
+
+    <macrodef name="unsignjar">
+    <attribute name="jarFile" />
+    <attribute name="manifest" />
+    <sequential>
+        <jar update="yes" jarfile="@{jarFile}.tmp" manifest="@{manifest}">
+            <zipfileset src="@{jarFile}">
+                <include name="**"/>
+                <exclude name="META-INF/*.SF"/>
+                <exclude name="META-INF/*.DSA"/>
+                <exclude name="META-INF/*.RSA"/>
+            </zipfileset>
+        </jar>
+        <move file="@{jarFile}.tmp"
+              tofile="@{jarFile}"
+              overwrite="true" />
+    </sequential>
+    </macrodef>
+
+    <!-- Load our properties -->
+    <property file="src/burp/release.properties"/>
+    <property name="dist.dir" value="."/>
+    <property name="dist.zip" value="${ant.project.name}.${version}.zip"/>
+
+    <target name="release">
+        <antcall target="margepkg"/>
+        <antcall target="releasepkg"/>
+    </target>
+
+    <target name="margepkg">
+        <jar destfile="release/${ant.project.name}.jar" update="no">
+            <zipgroupfileset dir="dist/" includes="*.jar" />
+            <zipgroupfileset dir="dist/lib" includes="*.jar" />
+        </jar>
+        <unsignjar jarFile="release/${ant.project.name}.jar" manifest="MANIFEST.MF" />
+    </target>
+
+    <target name="releasepkg">
+        <zip basedir="." destfile="${dist.zip}" update="false">
+            <include name="**"/>
+            <exclude name="dist/**"/>
+            <exclude name="nbproject/configs/**"/>
+            <exclude name="nbproject/private/**"/>
+            <exclude name="build/**"/>
+            <exclude name="**/.svn"/>
+            <exclude name="**/.git"/>
+            <exclude name="*.zip"/>
+            <exclude name="*.log"/>
+            <exclude name="*.log.lck"/>
+        </zip>
+    </target>
+    
+    <target name="clean">
+      <delete dir="/build"/>
+      <delete dir="/dist"/>
+    </target>
+    
+</project>
