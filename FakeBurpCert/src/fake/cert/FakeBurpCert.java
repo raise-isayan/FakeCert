@@ -23,7 +23,7 @@ public class FakeBurpCert {
     
     public static void premain(final String agentArgs, Instrumentation instrumentation) throws Exception {
         classPool = ClassPool.getDefault();
-        debug = "degug".equals(agentArgs);
+        debug = "debug".equals(agentArgs);
 
         instrumentation.addTransformer(new ClassFileTransformer() {
 
@@ -47,16 +47,14 @@ public class FakeBurpCert {
                         CtConstructor ctConstructor = ctClass.getDeclaredConstructor(new CtClass[]{ctX509CertInfo});
                         insertX509CertCommand(ctConstructor);
                         return ctClass.toBytecode();
-                    } else if (className != null && className.equals("java/security/KeyStore")) {
-                        if (debug) {
-                            System.out.println("className:" + className);
-                            CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
-                            StringBuilder command = new StringBuilder();
-                            command.append("{ System.out.println(\"pwd\\\"\" + new String($2) + \"\\\"\"); }");
-                            CtMethod ctLoadMethod = ctClass.getDeclaredMethod("load");
-                            ctLoadMethod.insertBefore(command.toString());
-                            return ctClass.toBytecode();
-                        }
+                    } else if (debug && className != null && className.equals("java/security/KeyStore")) {
+                        System.out.println("className:" + className);
+                        CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
+                        StringBuilder command = new StringBuilder();
+                        command.append("{ System.out.println(\"pwd\\\"\" + new String($2) + \"\\\"\"); }");
+                        CtMethod ctLoadMethod = ctClass.getDeclaredMethod("load");
+                        ctLoadMethod.insertBefore(command.toString());
+                        return ctClass.toBytecode();
                     }
 
                 } catch (Exception ex) {
