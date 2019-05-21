@@ -9,12 +9,14 @@ import extend.util.Util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import org.bouncycastle.cert.ocsp.OCSPReq;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.Req;
+import org.bouncycastle.util.encoders.Base64;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -91,6 +93,18 @@ public class OCSPUtilTest {
         assertEquals("cacert", alias);
     }
 
+    
+    /**
+     * Test of testGenURL method, of class OCSPUtil.
+     */
+    @Test
+    public void testGenURL() throws Exception {
+        System.out.println("testGenURL");
+        String reqFileName = OCSPUtilTest.class.getResource("../../resources/req.der").getPath();
+        byte [] buff = Util.bytesFromFile(new File(reqFileName));
+        System.out.println(URLEncoder.encode(Base64.toBase64String(buff), "8859_1"));
+    }
+    
     /**
      * Test of getFirstAlias method, of class OCSPUtil.
      */

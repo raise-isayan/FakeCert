@@ -15,7 +15,6 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.DatatypeConverter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -24,6 +23,7 @@ import org.bouncycastle.cert.ocsp.OCSPException;
 import org.bouncycastle.cert.ocsp.OCSPReq;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.Req;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  *
@@ -96,7 +96,7 @@ public class SimpleOCSPServer {
             String uri = he.getRequestURI().toString();
             String [] paths = uri.split("/");
             String url = URLDecoder.decode(paths[paths.length - 1], "8859_1");
-            byte [] b64 = DatatypeConverter.parseBase64Binary(url);
+            byte [] b64 = Base64.decode(url);
             doResponse(he, b64);
         }    
         

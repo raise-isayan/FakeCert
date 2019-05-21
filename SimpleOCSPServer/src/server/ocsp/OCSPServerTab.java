@@ -28,8 +28,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.bind.DatatypeConverter;
 import server.ocsp.OCSPProperty.CACertificateType;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  *
@@ -243,7 +243,7 @@ public class OCSPServerTab extends javax.swing.JPanel
             String password = getCAPassword();
             if (this.rdoBurpCA.isSelected()) {
                 Preferences prefs = Preferences.userNodeForPackage(burp.IBurpExtender.class);
-                byte[] caCartByte = DatatypeConverter.parseBase64Binary(prefs.get("caCert", ""));
+                byte[] caCartByte = Base64.decode(prefs.get("caCert", ""));
                 ks.load(new ByteArrayInputStream(caCartByte), password.toCharArray());
                 return ks;
             } else {
