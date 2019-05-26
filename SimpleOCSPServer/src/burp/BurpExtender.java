@@ -7,15 +7,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import extend.util.ConvertUtil;
 import server.ocsp.Config;
-import server.ocsp.OCSPProperty;
 import server.ocsp.OCSPServerTab;
+import server.ocsp.IOptionProperty;
 import server.ocsp.OptionProperty;
 
 /**
  *
  * @author isayan
  */
-public class BurpExtender extends BurpExtenderImpl implements OptionProperty {
+public class BurpExtender extends BurpExtenderImpl {
 
     public static BurpExtender getInstance() {
         return BurpExtenderImpl.<BurpExtender>getInstance();
@@ -28,16 +28,16 @@ public class BurpExtender extends BurpExtenderImpl implements OptionProperty {
         super.registerExtenderCallbacks(cb);
 
         // 設定ファイル読み込み
-        try {
-            String configXML = getCallbacks().loadExtensionSetting("configXML");
-            if (configXML != null) {
-                Config.loadFromXml(ConvertUtil.decompressZlibBase64(configXML), this.getProperty());
+        String configXML = getCallbacks().loadExtensionSetting("configXML");
+        if (configXML != null) {
+            try {
+                Config.loadFromXML(ConvertUtil.decompressZlibBase64(configXML), this.getProperty());
+            } catch (IOException ex) {
+                Logger.getLogger(BurpExtender.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (IOException ex) {
-            Logger.getLogger(BurpExtender.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.ocspTab = new OCSPServerTab();
-        this.ocspTab.setOCSPProperty(this.getOCSPProperty());
+        this.ocspTab.setOCSPProperty(this.option.getOCSPProperty());
         this.ocspTab.addPropertyChangeListener(newPropertyChangeListener());
         cb.addSuiteTab(this.ocspTab);
         cb.registerExtensionStateListener(this.ocspTab);
@@ -47,32 +47,22 @@ public class BurpExtender extends BurpExtenderImpl implements OptionProperty {
         return new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (OptionProperty.OCSP_PROPERTY.equals(evt.getPropertyName())) {
-                    setOCSPProperty(ocspTab.getOCSPProperty());
+                if (IOptionProperty.OCSP_PROPERTY.equals(evt.getPropertyName())) {
+                    getProperty().setOCSPProperty(ocspTab.getOCSPProperty());
                     applyOptionProperty();
                 }
             }
         };
     }
 
+    private final OptionProperty option = new OptionProperty();
+
     public OptionProperty getProperty() {
-        return this;
+        return this.option;
     }
-
-    public void setProperty(OptionProperty property) {
-        this.setOCSPProperty(property.getOCSPProperty());
-    }
-
-    private final OCSPProperty ocspProperty = new OCSPProperty();
-
-    @Override
-    public OCSPProperty getOCSPProperty() {
-        return this.ocspProperty;
-    }
-
-    @Override
-    public void setOCSPProperty(OCSPProperty ocspProperty) {
-        this.ocspProperty.setProperty(ocspProperty);
+    
+    public void setProperty(IOptionProperty property) {
+        this.option.setProperty(property);
     }
 
     protected void applyOptionProperty() {

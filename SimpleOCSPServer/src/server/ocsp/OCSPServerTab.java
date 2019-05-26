@@ -325,20 +325,20 @@ public class OCSPServerTab extends javax.swing.JPanel
     }//GEN-LAST:event_btnServerStartActionPerformed
     
     private void spnListenPortStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnListenPortStateChanged
-        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_spnListenPortStateChanged
 
     private void rdoBurpCAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rdoBurpCAStateChanged
-        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_rdoBurpCAStateChanged
 
     private void rdoCustomCAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rdoCustomCAStateChanged
         SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
-        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_rdoCustomCAStateChanged
 
     private void chkAutoStartStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkAutoStartStateChanged
-        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_chkAutoStartStateChanged
 
     private void btnServerStartStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_btnServerStartStateChanged
@@ -401,7 +401,7 @@ public class OCSPServerTab extends javax.swing.JPanel
     }
 
     private void customizeComponents() {
-        OptionProperty option = BurpExtender.getInstance().getProperty();
+        IOptionProperty option = BurpExtender.getInstance().getProperty();
         OCSPProperty ocsp = option.getOCSPProperty();
         if (ocsp.isAutoStart()) {
             this.btnServerStart.doClick();

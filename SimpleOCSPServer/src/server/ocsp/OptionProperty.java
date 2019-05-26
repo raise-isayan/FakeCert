@@ -2,13 +2,26 @@ package server.ocsp;
 
 /**
  *
- * @author isayan
+ * @author raise.isayan
  */
-public interface OptionProperty {
-    public final static String OCSP_PROPERTY = "OCSPPropery";
-    
-    public OCSPProperty getOCSPProperty();
-    
-    public void setOCSPProperty(OCSPProperty ocsp);
+public final class OptionProperty implements IOptionProperty {
+ 
+    private OCSPProperty ocsp = new OCSPProperty();
 
+    @Override
+    public OCSPProperty getOCSPProperty() {
+        return ocsp;
+    }
+    
+    @Override
+    public void setOCSPProperty(OCSPProperty ocsp) {
+        this.ocsp.setProperty(ocsp);
+    }
+
+    @Override
+    public void setProperty(IOptionProperty property) {
+        this.setOCSPProperty(property.getOCSPProperty());
+    }
+    
 }
+
