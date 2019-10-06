@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Premain-Class: fake.cert.FakeBurpCert
-Boot-Class-Path: javassist.jar
-Created-By: 1.8.0_77 (Oracle Corporation)
-

@@ -10,9 +10,11 @@ _____________
 Burp suite の作成する証明書に変更を加えます。
 現時点において以下のいずれかのことが可能です。
 
-1. SerialNumberの指定
-2. 証明書の有効期限の指定
-3. OCSP URI の追加
+1. CNの変更
+2. SerialNumberの指定
+3. 証明書の有効期限の指定
+4. SAN(Subject Alternative Name)の追加
+5. OCSP URI の追加
 
 SimpleOCSPServer
 _____________
@@ -39,13 +41,14 @@ java -javaagent:FakeBurpCert.jar -Xmx1024m -jar burpsuite_free_v1.7.06.jar
 cert.txt には 証明書を変更するためのルールを記載します。
 
 このファイルは以下の形式にて記載します。
-文字コードはUTF-8で記載する必要があります。
+なお、文字コードはUTF-8で記載する必要があります。
 
 ```
 # 行頭が#はコメント扱い
 CN=www\.example\.com,	x509.info.subject	CN=www.example.jp, OU=piyo CA, O=fuga, C=hoge
 CN=www\.example\.com,	x509.info.serialNumber	11223344AABB
 CN=www\.example\.com,	x509.info.validity	yyyy/MM/dd	2017/01/01	2027/12/31
+CN=www\.example\.com,	x509.info.extensions.SubjectAlternativeName	www.example.com
 CN=www\.example\.com,	x509.info.extensions.AuthorityInfoAccess.ocsp	http://www.example.com:8888/
 ```
 ルールは複数行記載することが可能です。
@@ -69,6 +72,8 @@ CN=www\.example\.com,	x509.info.extensions.AuthorityInfoAccess.ocsp	http://www.e
          * dateFormatPattern ... SimpleDateFormatにて利用可能な日付フォーマットを指定可能
          * fromDate ... 開始日(日付フォーマットの書式にて記載)
          * toDate ... 終了日(日付フォーマットの書式にて記載)
+* x509.info.extensions.SubjectAlternativeName
+    * 証明書のSAN ... 追加するSANを記載。
 * x509.info.extensions.AuthorityInfoAccess.ocsp
     * 証明書のOCSP URI ... URI を記載
 
@@ -141,13 +146,12 @@ Burp suite の Extenderは以下の手順で読み込めます。
 
 ## 開発環境
 * NetBeans 8.2 (http://netbeans.org/)
-* Apache ant 1.9 (http://ant.apache.org/)
 
 ## ビルド
 NetBeans にてビルドもしくは ant にてビルドします。
 
 ## 利用ライブラリ
-* Jassist 3.24.1
+* Jassist 3.26.0
     * http://jboss-javassist.github.io/javassist/
 * BouncyCastle 1.56
     * https://www.bouncycastle.org/license.html
