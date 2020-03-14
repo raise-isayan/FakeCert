@@ -36,6 +36,7 @@ Burp suiteのjarファイルがあるフォルダに移動し、(-jar オプシ�
 ```
 java -javaagent:FakeBurpCert.jar -Xmx1024m -jar burpsuite_free_v1.7.06.jar
 ```
+
 ## cert.txt ファイルの変更
 
 cert.txt には 証明書を変更するためのルールを記載します。
@@ -139,22 +140,27 @@ Burp suite の Extenderは以下の手順で読み込めます。
 2. [Select file ...]をクリックし、SimpleOCSPServer.jar を選択する。
 3. ｢Next｣をクリックし、エラーがでてないことを確認後、「Close」にてダイヤログを閉じる。
 
+実行ファイル版では、利用しているライブラリ(com.sun.net.httpserver.SimpleOCSPServer)が含まれていない関係で動作しません。jar版を利用してください。
+
 # 動作環境
 
 ## Burp suite
-* 1.7以上 (http://www.portswigger.net/burp/)
+* v1.7以上 (http://www.portswigger.net/burp/)
+* v2020.1 (最終確認バージョン)
 
 ## 開発環境
-* NetBeans 8.2 (http://netbeans.org/)
+* NetBeans 11.2 (https://netbeans.apache.org/)
 
 ## ビルド
-NetBeans にてビルドもしくは ant にてビルドします。
+NetBeans にてビルドもしくは meven にてビルドします。
 
 ## 利用ライブラリ
 * Jassist 3.26.0
     * http://jboss-javassist.github.io/javassist/
-* BouncyCastle 1.56
+* BouncyCastle 1.6.1
     * https://www.bouncycastle.org/license.html
+* Google gson 2.8.5
+    * https://github.com/google/gson/
 * Use Icon 
     * http://www.famfamfam.com/lab/icons/silk/
 * BurpExtlib

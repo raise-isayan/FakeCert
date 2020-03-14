@@ -37,15 +37,19 @@ public class FakeBurpCert {
                         }
                         CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
                         // 変換テーブル作成メソッドを追加
-                        addMappingTableMethod(ctClass);
+                        ctClass.addMethod(CtMethod.make(buildResourceCommand(FAKE_CREATEMAP_COMMAND), ctClass));
                         // 変換テーブルのフィールドを追加
                         CtField f = CtField.make("static java.util.Map translateMaps;", ctClass);
                         ctClass.addField(f, "createMap()");
                         // 変換処理を行うメソッドを追加
-                        addCertIncectionMethod(ctClass);
+                        CtMethod translateTableMethod = CtMethod.make(buildResourceCommand(FAKE_CERT_COMMAND), ctClass);
+                        ctClass.addMethod(translateTableMethod);
+
                         CtClass ctX509CertInfo = classPool.makeClass("sun.security.x509.X509CertInfo");
                         CtConstructor ctConstructor = ctClass.getDeclaredConstructor(new CtClass[]{ctX509CertInfo});
-                        insertX509CertCommand(ctConstructor);
+                        StringBuilder command = new StringBuilder();
+                        command.append("{ $1 = sun.security.x509.X509CertImpl.burpCertInjection($1); }");
+                        ctConstructor.insertBefore(command.toString());
                         return ctClass.toBytecode();
                     } else if (debug && className != null && className.equals("java/security/KeyStore")) {
                         System.out.println("className:" + className);
@@ -55,8 +59,10 @@ public class FakeBurpCert {
                         CtMethod ctLoadMethod = ctClass.getDeclaredMethod("load");
                         ctLoadMethod.insertBefore(command.toString());
                         return ctClass.toBytecode();
-                    }
+                    } else if (debug && className != null) {
 
+                    }
+                                     
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     IllegalClassFormatException e = new IllegalClassFormatException(ex.getMessage());
@@ -67,56 +73,24 @@ public class FakeBurpCert {
                 return null;
             }
 
-            CtConstructor insertX509CertCommand(CtConstructor ctConstructor) throws Exception {
-                StringBuilder command = new StringBuilder();
-                command.append("{");
-                command.append("  $1 = sun.security.x509.X509CertImpl.burpCertInjection($1);");
-                command.append("}");
-                ctConstructor.insertBefore(command.toString());
-                return ctConstructor;
-            }
-
-            CtClass addMappingTableMethod(CtClass ctClass) throws Exception {
-                // 変換用のテーブルを作成する
-                String command = buildCreateMap();
-                CtMethod translateTableMethod = CtMethod.make(command, ctClass);
-                ctClass.addMethod(translateTableMethod);
-                return ctClass;
-            }
-
-            CtClass addCertIncectionMethod(CtClass ctClass) throws Exception {
-                // 変換を行うメソッドを追加する
-                String command = buildFakeCertCommand();
-                CtMethod translateTableMethod = CtMethod.make(command, ctClass);
-                ctClass.addMethod(translateTableMethod);
-                return ctClass;
-            }
-
         });
 
     }
-
     
-    public static String buildFakeCertCommand() {
+    public final static String FAKE_CREATEMAP_COMMAND = "/fake/resources/createMap.jav";
+    public final static String FAKE_CERT_COMMAND = "/fake/resources/fakeCert.jav";
+    public final static String FAKE_BUNCY_CERT_COMMAND = "/fake/resources/fakeBouncyCert.jav";
+    
+    public static String buildResourceCommand(String resourcePath) {
         StringBuilder command = new StringBuilder();
-        try(InputStream inStream = FakeBurpCert.class.getResourceAsStream("/fake/resources/fakeCert.jav")) {            
+        try(InputStream inStream = FakeBurpCert.class.getResourceAsStream(resourcePath)) {            
             command.append(new String(readAllBytes(inStream), StandardCharsets.ISO_8859_1));      
         } catch (IOException ex) {        
             ex.printStackTrace();
         }
         return command.toString();
     }
-
-    public static String buildCreateMap() {
-        StringBuilder command = new StringBuilder();
-        try(InputStream inStream = FakeBurpCert.class.getResourceAsStream("/fake/resources/createMap.jav")) {            
-            command.append(new String(readAllBytes(inStream), StandardCharsets.ISO_8859_1));        
-        } catch (IOException ex) {        
-            ex.printStackTrace();
-        }
-        return command.toString();
-    }
-
+    
     /* InputStream.readAllBytes は JDK 9 からサポート */
     public static byte[] readAllBytes(InputStream stream) throws IOException {
         ByteArrayOutputStream bostm = new ByteArrayOutputStream();
