@@ -278,7 +278,8 @@ public class OCSPServerTab extends javax.swing.JPanel
 
     }
 
-    private SimpleOCSPServer.ThreadWrap thredServer = null;
+//    private SimpleOCSPServer.ThreadWrap thredServer = null;
+    private SimpleJettyServer thredServer = null;
 
     private void btnServerStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnServerStartActionPerformed
         if (this.btnServerStart.isSelected()) {
@@ -289,9 +290,14 @@ public class OCSPServerTab extends javax.swing.JPanel
                     String alias = CertUtil.getFirstAlias(ks);
                     PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(alias, password.toCharArray());
                     X509Certificate issuerCert = (X509Certificate) ks.getCertificate(alias);
-                    this.thredServer = new SimpleOCSPServer.ThreadWrap(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
-                    this.thredServer.setUncaughtExceptionHandler(this);
-                    this.thredServer.startServer();
+
+//                    this.thredServer = new SimpleOCSPServer.ThreadWrap(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
+//                    this.thredServer.setUncaughtExceptionHandler(this);
+//                    this.thredServer.startServer();
+
+                    this.thredServer = new SimpleJettyServer();
+                    this.thredServer.startServer(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
+
                 } catch (FileNotFoundException ex) {
                     JOptionPane.showMessageDialog(this, "File not found:" + this.txtCAFile.getText(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
@@ -312,6 +318,11 @@ public class OCSPServerTab extends javax.swing.JPanel
                     this.btnServerStart.setSelected(false);
                     Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (UnrecoverableKeyException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
+                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    this.btnServerStart.setSelected(false);
+                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);

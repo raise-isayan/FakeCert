@@ -51,6 +51,27 @@ public class FakeBurpCert {
                         command.append("{ $1 = sun.security.x509.X509CertImpl.burpCertInjection($1); }");
                         ctConstructor.insertBefore(command.toString());
                         return ctClass.toBytecode();
+                    } else if (className != null && className.equals("org/bouncycastle/asn1/x509/V3TBSCertificateGenerator")) {
+                        if (debug) {
+                            System.out.println("className:" + className);
+                        }
+                        CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
+                        // 変換テーブル作成メソッドを追加
+                        ctClass.addMethod(CtMethod.make(buildResourceCommand(FAKE_CREATEMAP_COMMAND), ctClass));
+
+                        // 変換テーブルのフィールドを追加
+                        CtField f = CtField.make("static java.util.Map translateMaps;", ctClass);
+                        ctClass.addField(f, "createMap()");
+                        // 変換処理を行うメソッドを追加
+                        CtMethod translateTableMethod = CtMethod.make(buildResourceCommand(FAKE_BUNCY_CERT_COMMAND), ctClass);
+                        ctClass.addMethod(translateTableMethod);
+                        
+                        CtMethod ctLoadMethod = ctClass.getDeclaredMethod("generateTBSCertificate");
+                        StringBuilder command = new StringBuilder();
+                        command.append("{ burpCertInjection(); }");
+                        ctLoadMethod.insertBefore(command.toString());
+                        return ctClass.toBytecode();
+                        
                     } else if (debug && className != null && className.equals("java/security/KeyStore")) {
                         System.out.println("className:" + className);
                         CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
@@ -60,7 +81,9 @@ public class FakeBurpCert {
                         ctLoadMethod.insertBefore(command.toString());
                         return ctClass.toBytecode();
                     } else if (debug && className != null) {
-
+                        if (className.startsWith("org/bouncycastle/")) {
+                            System.out.println("className:" + className);                    
+                        }                        
                     }
                                      
                 } catch (Exception ex) {

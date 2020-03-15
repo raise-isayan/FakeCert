@@ -10,7 +10,7 @@ public final class OptionProperty implements IOptionProperty {
 
     @Override
     public OCSPProperty getOCSPProperty() {
-        return ocsp;
+        return this.ocsp;
     }
     
     @Override
@@ -24,4 +24,3 @@ public final class OptionProperty implements IOptionProperty {
     }
     
 }
-

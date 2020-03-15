@@ -5,7 +5,7 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
         while (iterator.hasNext()) {
             java.util.regex.Pattern regexSubject = (java.util.regex.Pattern) iterator.next();
             java.util.regex.Matcher m = regexSubject.matcher(subject);
-            if (m.lookingAt()) {
+            if (m.find()) {
                 java.lang.System.out.println("subject:" + subject + "\t");
                 java.util.List attrs = (java.util.List) translateMaps.get(regexSubject);
                 for (int i = 0; i < attrs.size(); i++) {
@@ -31,29 +31,29 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
                         sun.security.x509.CertificateValidity interval = new sun.security.x509.CertificateValidity(fromDate, toDate);
                         certInfo.set(sun.security.x509.X509CertInfo.VALIDITY, interval);
                     } else if (key.equals("x509.info.extensions.SubjectAlternativeName")) {
-                            String value = (String) entry.getValue();
-                            java.lang.System.out.println("\treplace_san:" + value);
-                            sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
-                            sun.security.x509.CertificateExtensions ext = (sun.security.x509.CertificateExtensions) certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS);
-                            if (ext == null) {
-                                ext = new sun.security.x509.CertificateExtensions();
+                        String value = (String) entry.getValue();
+                        java.lang.System.out.println("\treplace_san:" + value);
+                        sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
+                        sun.security.x509.CertificateExtensions ext = (sun.security.x509.CertificateExtensions) certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS);
+                        if (ext == null) {
+                            ext = new sun.security.x509.CertificateExtensions();
+                        }
+                        sun.security.x509.SubjectAlternativeNameExtension san = (sun.security.x509.SubjectAlternativeNameExtension) ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME);
+                        if (san == null) {
+                            sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
+                            alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
+                            san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
+                        }
+                        else {
+                            sun.security.x509.GeneralNames alternativeNames = san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
+                            if (alternativeNames == null) {
+                                alternativeNames = new sun.security.x509.GeneralNames();                            
                             }
-                            sun.security.x509.SubjectAlternativeNameExtension san = (sun.security.x509.SubjectAlternativeNameExtension) ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME);
-                            if (san == null) {
-                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
-                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
-                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
-                            }
-                            else {
-                                sun.security.x509.GeneralNames alternativeNames = san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
-                                if (alternativeNames == null) {
-                                    alternativeNames = new sun.security.x509.GeneralNames();                            
-                                }
-                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
-                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);
-                            }
-                            ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
-                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);
+                            alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
+                            san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);
+                        }
+                        ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
+                        certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);
                     } else if (key.equals("x509.info.extensions.AuthorityInfoAccess.ocsp")) {
                         sun.security.x509.CertificateExtensions ext = (sun.security.x509.CertificateExtensions) certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS);
                         if (ext == null) {

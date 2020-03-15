@@ -46,11 +46,11 @@ cert.txt には 証明書を変更するためのルールを記載します。
 
 ```
 # 行頭が#はコメント扱い
-CN=www\.example\.com,	x509.info.subject	CN=www.example.jp, OU=piyo CA, O=fuga, C=hoge
-CN=www\.example\.com,	x509.info.serialNumber	11223344AABB
-CN=www\.example\.com,	x509.info.validity	yyyy/MM/dd	2017/01/01	2027/12/31
-CN=www\.example\.com,	x509.info.extensions.SubjectAlternativeName	www.example.com
-CN=www\.example\.com,	x509.info.extensions.AuthorityInfoAccess.ocsp	http://www.example.com:8888/
+CN=www\.example\.com(,$)	x509.info.subject	CN=www.example.jp, OU=piyo CA, O=fuga, C=hoge
+CN=www\.example\.com(,$)	x509.info.serialNumber	11223344AABB
+CN=www\.example\.com(,$)	x509.info.validity	yyyy/MM/dd	2017/01/01	2027/12/31
+CN=www\.example\.com(,$)	x509.info.extensions.SubjectAlternativeName	www.example.com
+CN=www\.example\.com(,$)	x509.info.extensions.AuthorityInfoAccess.ocsp	http://www.example.com:8888/
 ```
 ルールは複数行記載することが可能です。
 
@@ -155,13 +155,15 @@ Burp suite の Extenderは以下の手順で読み込めます。
 NetBeans にてビルドもしくは meven にてビルドします。
 
 ## 利用ライブラリ
-* Jassist 3.26.0
-    * http://jboss-javassist.github.io/javassist/
-* BouncyCastle 1.6.1
+* Jassist 3.26.0 (Mozilla Public License Version 1.1, GNU Lesser General Public License Version 2.1, Apache License Version 2.0)
+    * https://github.com/jboss-javassist/javassist
+* BouncyCastle 1.6.1 (MIT license)
     * https://www.bouncycastle.org/license.html
-* Google gson 2.8.5
+* Jetty 9 (Apache License 2.0, Eclipse Public License 1.0)
+    * https://www.eclipse.org/jetty/licenses.html
+* Google gson 2.8.5 (Apache License 2.0)
     * https://github.com/google/gson/
-* Use Icon 
+* Use Icon (Creative Commons Attribution 2.5 License)
     * http://www.famfamfam.com/lab/icons/silk/
 * BurpExtlib
     * Burp Extension 共通ライブラリ
