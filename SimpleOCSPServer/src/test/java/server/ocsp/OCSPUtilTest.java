@@ -69,7 +69,7 @@ public class OCSPUtilTest {
         assertEquals(new BigInteger("ED30220789C5A11D", 16), reqIDList[0].getCertID().getSerialNumber());
 
         OCSPResp resp = OCSPWrap.genOCSPResp(reqIDList, issuerPrivateKey, issuerCert);
-        assertEquals(resp.getStatus(), OCSPResp.SUCCESSFUL);
+        assertEquals(OCSPResp.SUCCESSFUL, resp.getStatus());
 
     }
 
@@ -82,6 +82,8 @@ public class OCSPUtilTest {
         String reqFileName = OCSPUtilTest.class.getResource("../../resources/req.der").getPath();
         byte[] buff = Util.bytesFromFile(new File(reqFileName));
         String ocspURL = URLEncoder.encode(Base64.toBase64String(buff), "8859_1");
+        System.out.println("ocspURL:" + ocspURL);
+        assertEquals("MG8wbTBGMEQwQjAJBgUrDgMCGgUABBS8yTAf%2BzfS3dkE3w3iAWPnuQhToAQU%2FZW%2FipZVJr947vgLStV5ogOLEg4CCQDtMCIHicWhHaIjMCEwHwYJKwYBBQUHMAECBBIEEFHb1rA7VYnQLA6o0rruOps%3D", ocspURL);        
         byte[] decode = OCSPWrap.decodeOCSPUrl(ocspURL);
         assertArrayEquals(buff, decode);
     }

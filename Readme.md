@@ -140,13 +140,11 @@ Burp suite の Extenderは以下の手順で読み込めます。
 2. [Select file ...]をクリックし、SimpleOCSPServer.jar を選択する。
 3. ｢Next｣をクリックし、エラーがでてないことを確認後、「Close」にてダイヤログを閉じる。
 
-実行ファイル版では、利用しているライブラリ(com.sun.net.httpserver.SimpleOCSPServer)が含まれていない関係で動作しません。jar版を利用してください。
-
 # 動作環境
 
 ## Burp suite
 * v1.7以上 (http://www.portswigger.net/burp/)
-* v2020.1 (最終確認バージョン)
+* v2020.2 (最終確認バージョン)
 
 ## 開発環境
 * NetBeans 11.2 (https://netbeans.apache.org/)

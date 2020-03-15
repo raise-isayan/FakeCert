@@ -39,7 +39,23 @@ public class SimpleJettyServer {
     public SimpleJettyServer() {
     }
     
+    private boolean debug = false;
     private Server server = null;
+    
+    /**
+     * @return the debug
+     */
+    public boolean isDebug() {
+        return debug;
+    }
+
+    /**
+     * @param debug the debug to set
+     */
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+        
     
     public void startServer(PrivateKey issuerPrivateKey, X509Certificate issuerCert, int listenPort) throws Exception {
         System.out.println("start listen port:" + listenPort);
@@ -52,8 +68,7 @@ public class SimpleJettyServer {
         contexts.setHandlers(new Handler[] { contextRoot });
 
         server.setHandler(contexts);
-        server.setDumpAfterStart(true);
-
+        server.setDumpAfterStart(this.debug);
         server.start();
     }
 
@@ -85,11 +100,16 @@ public class SimpleJettyServer {
     
     private static void usage() {
         System.out.println("");
-        System.out.println(String.format("Usage: java -jar %s.jar <-cafile=<pkcs12>> <-password=<pkcs12 password>> [-port=<listen port>]", SimpleJettyServer.class.getSimpleName()));
-        System.out.println(BUNDLE.getString("server.ocsp.main.arg.cafile"));
-        System.out.println(BUNDLE.getString("server.ocsp.main.arg.password"));
-        System.out.println(BUNDLE.getString("server.ocsp.main.arg.alias"));
-        System.out.println(BUNDLE.getString("server.ocsp.main.arg.port"));
+        System.out.println(String.format("Usage: java -jar %s.jar [option] <-cafile=<pkcs12>> <-password=<pkcs12 password>> [-port=<listen port>]", SimpleJettyServer.class.getSimpleName()));
+        System.out.println("[option]");
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.help"));
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.version"));
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.debug"));
+        System.out.println("[command]");
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.cafile"));
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.password"));
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.alias"));
+        System.out.println("\t" + BUNDLE.getString("server.ocsp.main.arg.port"));
         System.out.println("");
     }
 
@@ -184,6 +204,7 @@ public class SimpleJettyServer {
         File pkcs_ca = null;
         String password = null;
         String alias = null;
+        boolean debug = false;
 
         try {
             for (String arg : args) {
@@ -197,19 +218,24 @@ public class SimpleJettyServer {
                     usage();
                     System.exit(0);
                 }
-                // multi parameter
                 String[] param = arg.split("=", 2);
                 if (param.length < 2) {
-                    throw new IllegalArgumentException("argment err:" + String.join(" ", param));
+                    // single parameter
+                    if ("-d".equals(arg)) {
+                        debug = true;
+                    }
                 }
-                if ("-cafile".equals(param[0])) {
-                    pkcs_ca = new File(param[1]);
-                } else if ("-password".equals(param[0])) {
-                    password = param[1];
-                } else if ("-alias".equals(param[0])) {
-                    alias = param[1];
-                } else if ("-port".equals(param[0])) {
-                    defaultPort = Integer.parseInt(param[1]);
+                else {
+                    // multi parameter
+                    if ("-cafile".equals(param[0])) {
+                        pkcs_ca = new File(param[1]);
+                    } else if ("-password".equals(param[0])) {
+                        password = param[1];
+                    } else if ("-alias".equals(param[0])) {
+                        alias = param[1];
+                    } else if ("-port".equals(param[0])) {
+                        defaultPort = Integer.parseInt(param[1]);
+                    }                
                 }
             }
 
@@ -248,6 +274,7 @@ public class SimpleJettyServer {
             X509Certificate issuerCert = (X509Certificate) ks.getCertificate(alias);
 
             SimpleJettyServer server = new SimpleJettyServer();
+            server.setDebug(debug);
             server.startServer(issuerPrivateKey, issuerCert, defaultPort);
             server.joinServer();
                     
