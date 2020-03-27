@@ -46,5 +46,6 @@ public final class Config {
         OptionProperty load = JsonUtil.jsonFromString(json, OptionProperty.class, true);
         option.setProperty(load);
     }
+
     
 }

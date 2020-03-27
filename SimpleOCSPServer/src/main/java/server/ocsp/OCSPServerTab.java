@@ -79,11 +79,6 @@ public class OCSPServerTab extends javax.swing.JPanel
         });
 
         btnServerStart.setText("Start");
-        btnServerStart.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                btnServerStartStateChanged(evt);
-            }
-        });
         btnServerStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnServerStartActionPerformed(evt);
@@ -236,10 +231,10 @@ public class OCSPServerTab extends javax.swing.JPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
     public KeyStore loadKeyStore() throws IOException, KeyStoreException {
         try {
-            KeyStore ks = KeyStore.getInstance("PKCS12");
+            final KeyStore ks = KeyStore.getInstance("PKCS12");
             String password = getCAPassword();
             if (this.rdoBurpCA.isSelected()) {
                 Preferences prefs = Preferences.userNodeForPackage(burp.IBurpExtender.class);
@@ -290,14 +285,8 @@ public class OCSPServerTab extends javax.swing.JPanel
                     String alias = CertUtil.getFirstAlias(ks);
                     PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(alias, password.toCharArray());
                     X509Certificate issuerCert = (X509Certificate) ks.getCertificate(alias);
-
-//                    this.thredServer = new SimpleOCSPServer.ThreadWrap(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
-//                    this.thredServer.setUncaughtExceptionHandler(this);
-//                    this.thredServer.startServer();
-
                     this.thredServer = new SimpleJettyServer();
                     this.thredServer.startServer(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
-
                 } catch (FileNotFoundException ex) {
                     JOptionPane.showMessageDialog(this, "File not found:" + this.txtCAFile.getText(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
@@ -332,7 +321,20 @@ public class OCSPServerTab extends javax.swing.JPanel
         } else {
             this.stopThreadServer();
         }
-
+        // Enable
+        if (this.btnServerStart.isSelected()) {
+            this.btnServerStart.setText("Stop");
+            this.spnListenPort.setEnabled(false);
+            this.chkAutoStart.setEnabled(false);
+            SwingUtil.setContainerEnable(this.pnlCaCertificate, false);
+            SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
+        } else {
+            this.btnServerStart.setText("Start");
+            this.spnListenPort.setEnabled(true);
+            this.chkAutoStart.setEnabled(true);
+            SwingUtil.setContainerEnable(this.pnlCaCertificate, true);
+            SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
+        }
     }//GEN-LAST:event_btnServerStartActionPerformed
 
     private void spnListenPortStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnListenPortStateChanged
@@ -352,15 +354,7 @@ public class OCSPServerTab extends javax.swing.JPanel
         this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_chkAutoStartStateChanged
 
-    private void btnServerStartStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_btnServerStartStateChanged
-        if (this.btnServerStart.isSelected()) {
-            this.btnServerStart.setText("Stop");
-        } else {
-            this.btnServerStart.setText("Start");
-        }
-    }//GEN-LAST:event_btnServerStartStateChanged
-
-    final static FileFilter FILTER_PKCS12 = new FileNameExtensionFilter("certificate file(*.p12;*.pfx)", "p12", "pfx");
+    private final static FileFilter FILTER_PKCS12 = new FileNameExtensionFilter("certificate file(*.p12;*.pfx)", "p12", "pfx");
 
     private void btnSelectCustomCAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectCustomCAActionPerformed
         JFileChooser filechooser = new JFileChooser();
@@ -433,7 +427,7 @@ public class OCSPServerTab extends javax.swing.JPanel
     }
 
     public OCSPProperty getOCSPProperty() {
-        OCSPProperty ocspProperty = new OCSPProperty();
+        final OCSPProperty ocspProperty = new OCSPProperty();
         ocspProperty.setAutoStart(this.chkAutoStart.isSelected());
         ocspProperty.setListenPort((int) this.spnListenPort.getValue());
         if (this.rdoBurpCA.isSelected()) {

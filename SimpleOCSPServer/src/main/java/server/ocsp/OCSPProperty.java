@@ -1,5 +1,6 @@
 package server.ocsp;
 
+import com.google.gson.annotations.Expose;
 import java.io.File;
 
 /**
@@ -8,6 +9,7 @@ import java.io.File;
  */
 public class OCSPProperty {
 
+    @Expose
     private int listenPort = 8888;
 
     /**
@@ -28,6 +30,7 @@ public class OCSPProperty {
         BurpCA, CustomCA
     };
 
+    @Expose
     private CACertificateType caCertificateType = CACertificateType.BurpCA;
 
     /**
@@ -44,6 +47,7 @@ public class OCSPProperty {
         this.caCertificateType = caCertificateType;
     }
 
+    @Expose
     private File caFile = null;
 
     /**
@@ -60,6 +64,7 @@ public class OCSPProperty {
         this.caFile = caFile;
     }
 
+    @Expose
     private String password = "";
 
     /**
@@ -76,6 +81,7 @@ public class OCSPProperty {
         this.password = password;
     }
 
+    @Expose
     private boolean autoStart = false;
 
     /**
