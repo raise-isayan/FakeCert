@@ -96,7 +96,7 @@ public class OCSPUtilTest {
         System.out.println("getURL");
         String uri = "/base64_encode";
         String[] paths = uri.split("/");
-        assertEquals("base64_encode", paths[paths.length - 1]);
+        assertEquals("base64_encode", paths[paths.length - 1]);    
     }
 
 }

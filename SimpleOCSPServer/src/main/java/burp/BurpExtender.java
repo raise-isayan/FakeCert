@@ -19,6 +19,7 @@ public class BurpExtender extends BurpExtenderImpl {
     public BurpExtender() {
     }
 
+    @SuppressWarnings("unchecked")
     public static BurpExtender getInstance() {
         return BurpExtenderImpl.<BurpExtender>getInstance();
     }

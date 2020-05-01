@@ -1,6 +1,7 @@
 package server.ocsp;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
@@ -44,9 +45,14 @@ public class OCSPWrap {
     }
     
     public static byte [] decodeOCSPUrl(String path) {
-        String url = URLDecoder.decode(path, StandardCharsets.ISO_8859_1);
-        byte [] b64 = Base64.decode(url);
-        return b64;
+        try {
+            String url = URLDecoder.decode(path, StandardCharsets.ISO_8859_1.name());
+            byte [] b64 = Base64.decode(url);
+            return b64;        
+        } catch (UnsupportedEncodingException ex) {
+        
+        }
+        return new byte [] {};        
     }
     
     public static byte[] genOCSPRespEncoded(byte[] ocspRequest, PrivateKey issuerPrivateKey, X509Certificate issuerCert) throws IOException {

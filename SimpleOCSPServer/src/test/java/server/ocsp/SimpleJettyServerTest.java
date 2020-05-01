@@ -55,6 +55,7 @@ public class SimpleJettyServerTest {
      */
     @Test
     public void testServerOCSPReq() throws Exception {
+        System.out.println("serverOCSPReq");
         String caFileName = OCSPUtilTest.class.getResource("/resources/burpca.p12").getPath();
         String password = "testca";
         int defaultPort = 8765;

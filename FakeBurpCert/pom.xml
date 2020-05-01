@@ -7,6 +7,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <releaseVersion>${project.version}.2</releaseVersion>
+        <compilerArgument>-Xlint:unchecked</compilerArgument>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -43,8 +45,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <finalName>${project.artifactId}-v${project.version}</finalName>
-                    <outputDirectory>${project.basedir}/release</outputDirectory>
+                    <outputFile>${project.basedir}/release/${project.artifactId}-v${project.version}.jar</outputFile>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -107,7 +108,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <zip destfile="${project.artifactId}-v${project.version}.zip"  basedir=".">
+                                <zip destfile="${project.artifactId}-v${releaseVersion}.zip"  basedir=".">
                                     <include name="**"/>
                                     <exclude name="nbproject/"/>
                                     <exclude name="**/.git"/>
