@@ -13,14 +13,15 @@ public void burpCertInjection() {
                 String key = ((String) entry.getKey());
                 java.lang.System.out.print("attr[" + key + "]	");
                 if (key.equals("x509.info.subject")) {
-                    String value = (String) entry.getValue();
+                    String value = ((String)entry.getValue()).trim();
                     java.lang.System.out.println("\treplace_subject:[" + value + "]	");
                     subject = new org.bouncycastle.asn1.x500.X500Name(value);                            
                 } else if (key.equals("x509.info.serialNumber")) {
-                    serialNumber = new org.bouncycastle.asn1.ASN1Integer(new java.math.BigInteger((String) entry.getValue(), 16));
+                    String value = ((String)entry.getValue()).trim();
+                    serialNumber = new org.bouncycastle.asn1.ASN1Integer(new java.math.BigInteger(value, 16));
                 } else if (key.equals("x509.info.validity")) {
                     try {
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("\treplace_date:[" + value + "]	");
                         String[] list = value.split("\t", 3);
                         if (list.length != 3) {
@@ -34,13 +35,14 @@ public void burpCertInjection() {
                     } catch (java.text.ParseException ex) {
                         ex.printStackTrace();
                     }                        
-                } else if (key.equals("x509.info.extensions.SubjectAlternativeName")) {
+                } else if (key.startsWith("x509.info.extensions.SubjectAlternativeName")) {
                     try {
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("\treplace_san:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();
                         org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getCriticalExtensionOIDs();
+                        // not SAN Exension
                         for (int k = 0; k < oids.length; k++) {
                             if (!org.bouncycastle.asn1.x509.Extension.subjectAlternativeName.equals(oids[i])) {
                                 extensionsGenerator.addExtension(extensions.getExtension(oids[i]));
@@ -48,16 +50,22 @@ public void burpCertInjection() {
                         }
                         org.bouncycastle.asn1.x509.Extension sunExtenson = extensions.getExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName);
                         if (sunExtenson == null) {
-                            org.bouncycastle.asn1.x509.GeneralNames dnsNames = new org.bouncycastle.asn1.x509.GeneralNames(new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.dNSName, value));
-                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);
+                            if (!value.isEmpty()) {
+                                org.bouncycastle.asn1.x509.GeneralNames dnsNames = new org.bouncycastle.asn1.x509.GeneralNames(new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.dNSName, value));
+                                extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);
+                            }
                         }
                         else {
                             org.bouncycastle.asn1.x509.GeneralNames gns = org.bouncycastle.asn1.x509.GeneralNames.fromExtensions(extensions, org.bouncycastle.asn1.x509.Extension.subjectAlternativeName);
                             java.util.List dnsNameList = new java.util.ArrayList();
-                            dnsNameList.addAll(java.util.Arrays.asList(gns.getNames()));
-                            dnsNameList.add(new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.dNSName, value));
+                            if (!key.endsWith(".clear")) {
+                                dnsNameList.addAll(java.util.Arrays.asList(gns.getNames()));                            
+                            }
+                            if (!value.isEmpty()) {
+                                dnsNameList.add(new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.dNSName, value));
+                            }
                             org.bouncycastle.asn1.x509.GeneralNames dnsNames = new org.bouncycastle.asn1.x509.GeneralNames((org.bouncycastle.asn1.x509.GeneralName[])dnsNameList.toArray(new org.bouncycastle.asn1.x509.GeneralName[dnsNameList.size()]));
-                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);
+                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);                            
                         }                            
                         extensions = extensionsGenerator.generate();
                     } catch (java.io.IOException ex) {
@@ -67,7 +75,7 @@ public void burpCertInjection() {
                     }
                 } else if (key.equals("x509.info.extensions.AuthorityInfoAccess.ocsp")) {
                     try {
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("ocsp:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();

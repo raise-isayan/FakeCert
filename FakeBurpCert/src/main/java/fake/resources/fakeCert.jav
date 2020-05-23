@@ -13,13 +13,14 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
                     String key = ((String) entry.getKey());
                     java.lang.System.out.print("attr[" + key + "]	");
                     if (key.equals("x509.info.subject")) {
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("\treplace_subject:[" + value + "]	");
                         certInfo.set(sun.security.x509.X509CertInfo.SUBJECT, new sun.security.x509.CertificateSubjectName(new sun.security.x509.X500Name(value)));
                     } else if(key.equals("x509.info.serialNumber")) {
-                        certInfo.set(sun.security.x509.X509CertInfo.SERIAL_NUMBER, new sun.security.x509.CertificateSerialNumber(new java.math.BigInteger((String) entry.getValue(), 16)));
+                        String value = ((String)entry.getValue()).trim();
+                        certInfo.set(sun.security.x509.X509CertInfo.SERIAL_NUMBER, new sun.security.x509.CertificateSerialNumber(new java.math.BigInteger(value, 16)));
                     } else if (key.equals("x509.info.validity")) {
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("\treplace_date:[" + value + "]	");
                         String[] list = value.split("\t", 3);
                         if (list.length != 3) {
@@ -30,36 +31,56 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
                         java.util.Date toDate = format.parse(list[2]);
                         sun.security.x509.CertificateValidity interval = new sun.security.x509.CertificateValidity(fromDate, toDate);
                         certInfo.set(sun.security.x509.X509CertInfo.VALIDITY, interval);
-                    } else if (key.equals("x509.info.extensions.SubjectAlternativeName")) {
-                        String value = (String) entry.getValue();
+                    } else if (key.startsWith("x509.info.extensions.SubjectAlternativeName")) {
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("\treplace_san:" + value);
-                        sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
                         sun.security.x509.CertificateExtensions ext = (sun.security.x509.CertificateExtensions) certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS);
                         if (ext == null) {
                             ext = new sun.security.x509.CertificateExtensions();
                         }
                         sun.security.x509.SubjectAlternativeNameExtension san = (sun.security.x509.SubjectAlternativeNameExtension) ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME);
                         if (san == null) {
-                            sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
-                            alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
-                            san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
+                            if (!value.isEmpty()) {
+                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
+                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));                            
+                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
+                            }
                         }
                         else {
                             sun.security.x509.GeneralNames alternativeNames = san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
                             if (alternativeNames == null) {
                                 alternativeNames = new sun.security.x509.GeneralNames();                            
                             }
-                            alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
-                            san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);
+                            if (key.endsWith(".clear")) {
+                                alternativeNames = new sun.security.x509.GeneralNames();  
+                                if (ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME) != null) ext.delete(sun.security.x509.SubjectAlternativeNameExtension.NAME);
+                                if (san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) san.delete(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
+                            }
+                            if (!value.isEmpty()) {
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
+                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
+                            }
+                            if (alternativeNames.size() > 0) {
+                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);                                                
+                            }
                         }
-                        ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
-                        certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);
+                        if (san != null && san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) {                    
+                            ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
+                        }
+                        if (ext.getElements().hasMoreElements()) {
+                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);                    
+                        }
+                        else {
+                            if (certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS) != null) certInfo.delete(sun.security.x509.X509CertInfo.EXTENSIONS);
+                        }
+
                     } else if (key.equals("x509.info.extensions.AuthorityInfoAccess.ocsp")) {
                         sun.security.x509.CertificateExtensions ext = (sun.security.x509.CertificateExtensions) certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS);
                         if (ext == null) {
                             ext = new sun.security.x509.CertificateExtensions();
                         }
-                        String value = (String) entry.getValue();
+                        String value = ((String)entry.getValue()).trim();
                         java.lang.System.out.println("ocsp:" + value);
                         java.util.List adList = new java.util.ArrayList();
                         adList.add(new sun.security.x509.AccessDescription(sun.security.x509.AccessDescription.Ad_OCSP_Id, new sun.security.x509.GeneralName(new sun.security.x509.URIName(value))));

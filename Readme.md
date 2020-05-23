@@ -13,7 +13,7 @@ Burp suite の作成する証明書に変更を加えます。
 1. CNの変更
 2. SerialNumberの指定
 3. 証明書の有効期限の指定
-4. SAN(Subject Alternative Name)の追加
+4. SAN(Subject Alternative Name)の変更もしくは追加
 5. OCSP URI の追加
 
 SimpleOCSPServer
@@ -66,15 +66,23 @@ CN=www\.example\.com(,$)	x509.info.extensions.AuthorityInfoAccess.ocsp	http://ww
 
 * x509.info.subject
     * 証明書のsubject ... 変更後のSubjectを記載。CNについても変更可能です。
+
 * x509.info.serialNumber
     * 証明書のserialNumber ... 16進数で記載
+
 * x509.info.validity
     * 証明書の有効期限 ... [dateFormatPattern] [fromDate] [toDate]の順で記載。各項目はタブ区切りです。
          * dateFormatPattern ... SimpleDateFormatにて利用可能な日付フォーマットを指定可能
          * fromDate ... 開始日(日付フォーマットの書式にて記載)
          * toDate ... 終了日(日付フォーマットの書式にて記載)
+
 * x509.info.extensions.SubjectAlternativeName
-    * 証明書のSAN ... 追加するSANを記載。
+    * 証明書のSAN ... 追加するSANを記載します。既存のSANの変更や削除はされずに指定したSANの追加となります。
+
+* x509.info.extensions.SubjectAlternativeName.clear
+    * 既存のSANをクリアします。値が指定されてない場合は、SANが指定されていない証明書となり、
+      値が指定された場合は、既存のSANをクリアした後に指定された値が追加されます。
+
 * x509.info.extensions.AuthorityInfoAccess.ocsp
     * 証明書のOCSP URI ... URI を記載
 
@@ -82,6 +90,12 @@ CN=www\.example\.com(,$)	x509.info.extensions.AuthorityInfoAccess.ocsp	http://ww
 
 ```
 CN=www.example.jp, OU=PortSwigger CA, O=PortSwigger, C=PortSwigger
+```
+
+Burp suiteのバージョンv2020.2からは、証明書のライブラリにBouncy Castleが利用されるようになっており以下の形式となっております。
+
+```
+C=PortSwigger,O=PortSwigger,OU=PortSwigger CA,CN=www.example.com
 ```
 
 証明書のOCSP URI を記載した場合はクライアントアプリから検証処理のリクエストが発生する場合があります。

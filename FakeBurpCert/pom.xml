@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <releaseVersion>${project.version}.2</releaseVersion>
+        <releaseVersion>${project.version}.3</releaseVersion>
         <compilerArgument>-Xlint:unchecked</compilerArgument>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -45,7 +45,8 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <outputFile>${project.basedir}/release/${project.artifactId}-v${project.version}.jar</outputFile>
+                    <finalName>${project.artifactId}-v${project.version}</finalName>
+                    <outputDirectory>${project.basedir}/release</outputDirectory>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -143,13 +144,20 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcpkix-jdk15on</artifactId>
             <version>1.61</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.61</version>
-            <scope>provided</scope>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>4.11</version>
         </dependency>
 
     </dependencies>

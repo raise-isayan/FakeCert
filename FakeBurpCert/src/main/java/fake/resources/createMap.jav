@@ -10,7 +10,7 @@ public static java.util.Map createMap() {
             }
             String[] inputs = line.split("\t", 3);
             java.util.List item = new java.util.ArrayList();
-            item.add(new java.util.AbstractMap.SimpleEntry(inputs[1], inputs[2]));
+            item.add(new java.util.AbstractMap.SimpleEntry(inputs[1], (inputs.length > 2) ? inputs[2] : ""));
             java.util.List attrs = (java.util.List) map.putIfAbsent(java.util.regex.Pattern.compile(inputs[0]), item);
             if (attrs != null) {
                 attrs.addAll(item);
@@ -27,4 +27,4 @@ public static java.util.Map createMap() {
         }
     }
     return map;
-}
+}    
