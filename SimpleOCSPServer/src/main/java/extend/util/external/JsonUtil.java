@@ -27,7 +27,7 @@ public class JsonUtil {
 
     public static boolean validJson(String jsonElementString) {
         try {
-            JsonParser.parseString(jsonElementString);        
+            JsonParser.parseString(jsonElementString);
             return true;
         }
         catch (JsonSyntaxException ex) {
@@ -62,29 +62,37 @@ public class JsonUtil {
     }
 
     public static DefaultTreeModel toJsonTreeModel(JsonElement jsonElement) {
-        final DefaultMutableTreeNode rootJson = new DefaultMutableTreeNode("JSON");
-        final DefaultTreeModel model = new DefaultTreeModel(rootJson);
+        DefaultMutableTreeNode rootJson = new DefaultMutableTreeNode("JSON");
+        DefaultTreeModel model = new DefaultTreeModel(rootJson);
         toJsonTreeNode(jsonElement, rootJson);
         return model;
     }
 
+    public static DefaultTreeModel toJsonTreeModel(JsonpElement jsonpElement) {
+        DefaultMutableTreeNode rootJson = new DefaultMutableTreeNode("JSONP");
+        DefaultTreeModel model = new DefaultTreeModel(rootJson);
+        rootJson.add(new DefaultMutableTreeNode(jsonpElement.getCallbackName() + "()"));
+        toJsonTreeNode(jsonpElement.getJsonElement(), rootJson);
+        return model;
+    }
+    
     private static void toJsonTreeNode(JsonElement jsonElement, DefaultMutableTreeNode parentNode) {
         if (jsonElement.isJsonObject()) {
-            final DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("{}");
-            parentNode.add(rootNode);
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode("{}");
+            parentNode.add(node);
             JsonObject jsonObject = (JsonObject) jsonElement;
             Set<Map.Entry<String, JsonElement>> set = jsonObject.entrySet();
             for (Map.Entry<String, JsonElement> s : set) {
                 JsonElement value = s.getValue();
                 if (value.isJsonNull()) {
                     DefaultMutableTreeNode jsonKeySet = new DefaultMutableTreeNode(s);
-                    rootNode.add(jsonKeySet);
+                    node.add(jsonKeySet);
                 } else if (value.isJsonPrimitive()) {
                     DefaultMutableTreeNode jsonKeySet = new DefaultMutableTreeNode(s);
-                    rootNode.add(jsonKeySet);
+                    node.add(jsonKeySet);
                 } else {
                     DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(s.getKey());
-                    rootNode.add(childNode);
+                    node.add(childNode);
                     toJsonTreeNode(value, childNode);
                 }
             }
@@ -115,7 +123,17 @@ public class JsonUtil {
         }        
     }
 
-    private final static Map<Class<?>, Object> typeAdapterMap = new HashMap<>();
+    public static boolean isJsonp(String jsonpString) {
+        try {
+            JsonpElement.parseJsonp(jsonpString);    
+            return true;    
+        }
+        catch (JsonSyntaxException ex) {
+            return false;    
+        }
+    }
+    
+    private static final Map<Class<?>, Object> typeAdapterMap = new HashMap<>();
     
     public static void registerTypeHierarchyAdapter(Class<?> baseType, Object typeAdapter) {
         typeAdapterMap.put(baseType, typeAdapter);
@@ -161,8 +179,8 @@ public class JsonUtil {
         }        
         Gson gson = gsonBuilder.create();
         return gson.toJson(bean);
-    } 
-
+    }
+    
     public static <T> T jsonFromString(String jsonString, Class<T> classOfT, boolean exludeFields) {
         GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls();
         for (Map.Entry<Class<?>, Object> set : typeAdapterMap.entrySet()) {
