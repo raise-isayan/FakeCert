@@ -15,7 +15,8 @@ import server.ocsp.OptionProperty;
  * @author isayan
  */
 public class BurpExtender extends BurpExtenderImpl {
-
+   private final static Logger logger = Logger.getLogger(BurpExtender.class.getName());
+ 
     public BurpExtender() {
     }
 
@@ -36,7 +37,7 @@ public class BurpExtender extends BurpExtenderImpl {
             try {
                 Config.stringFromJson(ConvertUtil.decompressZlibBase64(configJSON), this.getProperty());
             } catch (Exception ex) {
-                Logger.getLogger(BurpExtender.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
         this.ocspTab = new OCSPServerTab();
@@ -73,7 +74,7 @@ public class BurpExtender extends BurpExtenderImpl {
             String configJSON = Config.stringToJson(this.getProperty());
             getCallbacks().saveExtensionSetting("configJSON", ConvertUtil.compressZlibBase64(configJSON));
         } catch (Exception ex) {
-            Logger.getLogger(BurpExtender.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
     }
 

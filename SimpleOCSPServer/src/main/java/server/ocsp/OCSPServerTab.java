@@ -38,6 +38,7 @@ import server.ocsp.OCSPProperty.CACertificateType;
  */
 public class OCSPServerTab extends javax.swing.JPanel
         implements ITab, IExtensionStateListener, UncaughtExceptionHandler {
+   private final static Logger logger = Logger.getLogger(OCSPServerTab.class.getName());
 
     /**
      * Creates new form OCSPServerTab
@@ -295,27 +296,27 @@ public class OCSPServerTab extends javax.swing.JPanel
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 } catch (KeyStoreException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 } catch (UnrecoverableKeyException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    Logger.getLogger(OCSPServerTab.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, null, ex);
                 }
             }
         } else {

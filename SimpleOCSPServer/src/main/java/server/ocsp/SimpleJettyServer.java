@@ -34,6 +34,8 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  * @author isayan
  */
 public class SimpleJettyServer {
+   private final static Logger logger = Logger.getLogger(SimpleJettyServer.class.getName());
+
     protected final static java.util.ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("server/ocsp/resources/Resource");
 
     public SimpleJettyServer() {
@@ -81,7 +83,7 @@ public class SimpleJettyServer {
             try {
                 this.server.join();
             } catch (InterruptedException ex) {
-                Logger.getLogger(SimpleJettyServer.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }            
     }
@@ -92,7 +94,7 @@ public class SimpleJettyServer {
             try {
                 this.server.stop();
             } catch (Exception ex) {
-                Logger.getLogger(SimpleJettyServer.class.getName()).log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, null, ex);
             }
         }
         this.server = null;
@@ -176,7 +178,7 @@ public class SimpleJettyServer {
             try (OutputStream os = response.getOutputStream()) {
                 os.write(errmsg.getBytes(StandardCharsets.UTF_8));
             }
-            Logger.getLogger(SimpleJettyServer.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
 
     }
@@ -281,7 +283,7 @@ public class SimpleJettyServer {
         } catch (Exception ex) {
             String errmsg = String.format("%s: %s", ex.getClass().getName(), ex.getMessage());
             System.out.println(errmsg);
-            Logger.getLogger(SimpleJettyServer.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
             usage();
         }
     }
