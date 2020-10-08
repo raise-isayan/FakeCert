@@ -65,6 +65,27 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
+    <Component class="javax.swing.JToggleButton" name="btnServerStart">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Start"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnServerStartActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkAutoStart">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Automatic start at loading"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="chkAutoStartStateChanged"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblListenPort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Listen port:"/>
+      </Properties>
+    </Component>
     <Component class="javax.swing.JSpinner" name="spnListenPort">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
@@ -77,19 +98,6 @@
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="spnListenPortStateChanged"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="btnServerStart">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Start"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnServerStartActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblListenPort">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Listen port:"/>
-      </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="pnlCaCertificate">
       <Properties>
@@ -222,11 +230,6 @@
                 <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lblPassword">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="password:"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JCheckBox" name="chkNonMaskPassword">
               <Properties>
                 <Property name="text" type="java.lang.String" value="non mask password "/>
@@ -235,17 +238,14 @@
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="chkNonMaskPasswordStateChanged"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblPassword">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="password:"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JCheckBox" name="chkAutoStart">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Automatic start at loading"/>
-      </Properties>
-      <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="chkAutoStartStateChanged"/>
-      </Events>
-    </Component>
   </SubComponents>
 </Form>

@@ -37,7 +37,7 @@ public class BurpExtender extends BurpExtenderImpl {
             try {
                 Config.stringFromJson(ConvertUtil.decompressZlibBase64(configJSON), this.getProperty());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         this.ocspTab = new OCSPServerTab();
@@ -74,7 +74,7 @@ public class BurpExtender extends BurpExtenderImpl {
             String configJSON = Config.stringToJson(this.getProperty());
             getCallbacks().saveExtensionSetting("configJSON", ConvertUtil.compressZlibBase64(configJSON));
         } catch (Exception ex) {
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 

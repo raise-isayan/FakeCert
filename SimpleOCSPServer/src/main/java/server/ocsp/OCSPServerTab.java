@@ -57,9 +57,10 @@ public class OCSPServerTab extends javax.swing.JPanel
     private void initComponents() {
 
         btnGrpCACertificate = new javax.swing.ButtonGroup();
-        spnListenPort = new javax.swing.JSpinner();
         btnServerStart = new javax.swing.JToggleButton();
+        chkAutoStart = new javax.swing.JCheckBox();
         lblListenPort = new javax.swing.JLabel();
+        spnListenPort = new javax.swing.JSpinner();
         pnlCaCertificate = new javax.swing.JPanel();
         rdoBurpCA = new javax.swing.JRadioButton();
         rdoCustomCA = new javax.swing.JRadioButton();
@@ -67,17 +68,8 @@ public class OCSPServerTab extends javax.swing.JPanel
         txtCAFile = new javax.swing.JTextField();
         btnSelectCustomCA = new javax.swing.JButton();
         txtCApassword = new javax.swing.JPasswordField();
-        lblPassword = new javax.swing.JLabel();
         chkNonMaskPassword = new javax.swing.JCheckBox();
-        chkAutoStart = new javax.swing.JCheckBox();
-
-        spnListenPort.setModel(new javax.swing.SpinnerNumberModel(8888, 1024, 65535, 1));
-        spnListenPort.setEditor(new javax.swing.JSpinner.NumberEditor(spnListenPort, "#0"));
-        spnListenPort.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spnListenPortStateChanged(evt);
-            }
-        });
+        lblPassword = new javax.swing.JLabel();
 
         btnServerStart.setText("Start");
         btnServerStart.addActionListener(new java.awt.event.ActionListener() {
@@ -86,7 +78,22 @@ public class OCSPServerTab extends javax.swing.JPanel
             }
         });
 
+        chkAutoStart.setText("Automatic start at loading");
+        chkAutoStart.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                chkAutoStartStateChanged(evt);
+            }
+        });
+
         lblListenPort.setText("Listen port:");
+
+        spnListenPort.setModel(new javax.swing.SpinnerNumberModel(8888, 1024, 65535, 1));
+        spnListenPort.setEditor(new javax.swing.JSpinner.NumberEditor(spnListenPort, "#0"));
+        spnListenPort.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnListenPortStateChanged(evt);
+            }
+        });
 
         pnlCaCertificate.setBorder(javax.swing.BorderFactory.createTitledBorder("CA Certificate"));
 
@@ -116,14 +123,14 @@ public class OCSPServerTab extends javax.swing.JPanel
 
         txtCApassword.setToolTipText("");
 
-        lblPassword.setText("password:");
-
         chkNonMaskPassword.setText("non mask password ");
         chkNonMaskPassword.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 chkNonMaskPasswordStateChanged(evt);
             }
         });
+
+        lblPassword.setText("password:");
 
         javax.swing.GroupLayout pnlCustomCALayout = new javax.swing.GroupLayout(pnlCustomCA);
         pnlCustomCA.setLayout(pnlCustomCALayout);
@@ -187,13 +194,6 @@ public class OCSPServerTab extends javax.swing.JPanel
                 .addComponent(pnlCustomCA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(52, Short.MAX_VALUE))
         );
-
-        chkAutoStart.setText("Automatic start at loading");
-        chkAutoStart.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                chkAutoStartStateChanged(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

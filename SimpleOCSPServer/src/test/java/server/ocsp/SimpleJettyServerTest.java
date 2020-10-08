@@ -89,11 +89,13 @@ public class SimpleJettyServerTest {
             String reqFileName = OCSPUtilTest.class.getResource("/resources/req.der").getPath();
             
             {
+                // 疎通確認用
+                // URLのTOPは例外で正常を返す
                 URL url = new URL("http", "127.0.0.1", defaultPort, "/");            
                 Request request = httpClient.newRequest(url.toURI());
                 ContentResponse response = request.send();
                 int status = response.getStatus();
-                assertEquals(HttpURLConnection.HTTP_INTERNAL_ERROR, status);            
+                assertEquals(HttpURLConnection.HTTP_OK, status);
             }
             {
                 URL url = new URL("http", "127.0.0.1", defaultPort, "/MG8wbTBGMEQwQjAJBgUrDgMCGgUABBS8yTAf%2BzfS3dkE3w3iAWPnuQhToAQU%2FZW%2FipZVJr947vgLStV5ogOLEg4CCQDtMCIHicWhHaIjMCEwHwYJKwYBBQUHMAECBBIEEFHb1rA7VYnQLA6o0rruOps%3D");            

@@ -8,8 +8,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -142,9 +142,14 @@ public class SimpleJettyServer {
         
         public void doGet(Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
             String uri = baseRequest.getRequestURI();
-            String[] paths = uri.split("/");
-            byte[] b64 = OCSPWrap.decodeOCSPUrl(paths[paths.length - 1]);
-            doResponse(response, b64);
+            if (uri.equals("/")) {
+                doSuccessResponse(response);
+            }
+            else {
+                String[] paths = uri.split("/");
+                byte[] b64 = OCSPWrap.decodeOCSPUrl(paths[paths.length - 1]);
+                doResponse(response, b64);
+            }
         }
 
         public void doPost(Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -160,6 +165,28 @@ public class SimpleJettyServer {
             }
         }
 
+        public void doSuccessResponse(HttpServletResponse response) throws IOException {
+            response.setContentType("text/html");
+            response.setStatus(HttpURLConnection.HTTP_OK);
+            try (PrintStream os = new PrintStream(response.getOutputStream())) {
+                    os.println("<html>" +
+                                "<p>Success</p>" +
+                                "<p>Support RFC2560</p>" +
+                                "<p><strong>GET</strong>" +
+                                "<pre><code>GET {url}/{url-encoding of base-64 encoding of the DER encoding of the OCSPRequest}</code></pre>" +
+                                "<p><strong>POST</strong>" +
+                                "<pre><code>POST {url}/" +
+                                "Host: 192.0.2.11" +
+                                "Content-Length: ..." +
+                                "" +
+                                "{DER encoding of the OCSPRequest}</code></pre>" +
+                                "" +
+                                "<p><strong>GET/POST Response</strong>" +
+                                "<pre><code>{CertStatus returns only Good}</code></pre>" +
+                                "</html>");
+            }
+        }
+                
         public void doResponse(HttpServletResponse response, byte[] ocspRequest) throws IOException {
             byte[] resp = OCSPWrap.genOCSPRespEncoded(ocspRequest, issuerPrivateKey, issuerCert);
             response.setContentType("application/ocsp-response");
@@ -171,12 +198,14 @@ public class SimpleJettyServer {
         }
 
         public void doThrowable(HttpServletResponse response, Exception ex) throws IOException {
-            String errmsg = Util.getStackTrace(ex);
+            StringBuilder errmsg = new StringBuilder();
+            errmsg.append(ex.getMessage());
+            errmsg.append(Util.getStackTrace(ex));
             response.setContentType("text/plain");
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
             response.setContentLength(errmsg.length());
-            try (OutputStream os = response.getOutputStream()) {
-                os.write(errmsg.getBytes(StandardCharsets.UTF_8));
+            try (PrintStream os = new PrintStream(response.getOutputStream())) {
+                os.println(errmsg.toString());
             }
             logger.log(Level.SEVERE, null, ex);
         }
@@ -283,7 +312,7 @@ public class SimpleJettyServer {
         } catch (Exception ex) {
             String errmsg = String.format("%s: %s", ex.getClass().getName(), ex.getMessage());
             System.out.println(errmsg);
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
             usage();
         }
     }
