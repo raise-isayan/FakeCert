@@ -72,14 +72,15 @@ public class FakeBurpCert {
                         ctLoadMethod.insertBefore(command.toString());
                         return ctClass.toBytecode();
                         
-                    } else if (debug && className != null && className.equals("java/security/KeyStore")) {
-                        System.out.println("className:" + className);
-                        CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
-                        StringBuilder command = new StringBuilder();
-                        command.append("{ System.out.println(\"pwd\\\"\" + new String($2) + \"\\\"\"); }");
-                        CtMethod ctLoadMethod = ctClass.getDeclaredMethod("load");
-                        ctLoadMethod.insertBefore(command.toString());
-                        return ctClass.toBytecode();
+// burp v2020.6 以降において以下の処理があると、HTTPSにおいて接続時にエラーとなってしまうためコメント
+//                    } else if (debug && className != null && className.equals("java/security/KeyStore")) {
+//                        System.out.println("className:" + className);
+//                        CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
+//                        StringBuilder command = new StringBuilder();
+//                        command.append("{ System.out.println(\"pwd\\\"\" + new String($2) + \"\\\"\"); }");
+//                        CtMethod ctLoadMethod = ctClass.getDeclaredMethod("load");
+//                        ctLoadMethod.insertBefore(command.toString());
+//                        return ctClass.toBytecode();
                     } else if (debug && className != null) {
                         if (className.startsWith("org/bouncycastle/")) {
                             System.out.println("className:" + className);                    
