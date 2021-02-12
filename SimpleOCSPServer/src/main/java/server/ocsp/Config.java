@@ -1,6 +1,7 @@
 package server.ocsp;
 
-import extend.util.external.JsonUtil;
+import extension.burp.BurpConfig;
+import extension.helpers.json.JsonUtil;
 import java.io.File;
 import java.io.IOException;
 
@@ -8,25 +9,17 @@ import java.io.IOException;
  *
  * @author isayan
  */
-public final class Config {
+public final class Config extends BurpConfig {
 
     private Config() {
     }
 
-    public static String getUserHome() {
-        return System.getProperties().getProperty("user.home");
-    }
-
-    public static String getExtensionDir() {
+    public static String getExtensionPath() {
         return ".fakecert";
     }
-    
-    public static String getUserDir() {
-        return System.getProperties().getProperty("user.dir");
-    }
-    
-    public static File getExtensionHomeDir() {
-        return new File(Config.getUserHome(), Config.getExtensionDir());
+        
+    public static File getExtensionHomeFile() {
+        return new File(BurpConfig.getUserHomePath(), getExtensionPath());
     }
 
     public static void saveToJson(File fo, OptionProperty option) throws IOException {
@@ -47,5 +40,8 @@ public final class Config {
         option.setProperty(load);
     }
 
+    public static String stringToJson(IOptionProperty option) {
+        return JsonUtil.jsonToString(option.getOption(), true);
+    }
     
 }

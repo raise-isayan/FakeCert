@@ -1,12 +1,14 @@
 package server.ocsp;
 
-import extend.util.CustomVersion;
+import extension.burp.BurpConfig;
+import extension.view.base.ICustomVersion;
+
 
 /**
  *
  * @author isayan
  */
-public final class Version extends CustomVersion {
+public final class Version extends ICustomVersion {
 
     private final java.util.ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("burp/resources/release");
 
@@ -43,8 +45,8 @@ public final class Version extends CustomVersion {
         return String.format(VERSION_INFO_FMT,
             getProjectName(),
             Version.getInstance().getVersion(), 
-            Config.getUserDir(),
-            Config.getExtensionHomeDir().getAbsoluteFile());    
+            Config.getUserDirPath(),
+            Config.getExtensionHomeFile().getAbsoluteFile());    
     }
     
 }

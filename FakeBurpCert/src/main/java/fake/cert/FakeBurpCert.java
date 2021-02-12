@@ -82,9 +82,10 @@ public class FakeBurpCert {
 //                        ctLoadMethod.insertBefore(command.toString());
 //                        return ctClass.toBytecode();
                     } else if (debug && className != null) {
-                        if (className.startsWith("org/bouncycastle/")) {
-                            System.out.println("className:" + className);                    
-                        }                        
+//                        if (className.startsWith("org/bouncycastle/")) {
+//                            System.out.println("className:" + className);                    
+//                        }                        
+                        System.out.println("className:" + className);                    
                     }
                                      
                 } catch (Exception ex) {

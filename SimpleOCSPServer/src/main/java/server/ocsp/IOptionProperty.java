@@ -4,13 +4,12 @@ package server.ocsp;
  *
  * @author isayan
  */
-public interface IOptionProperty {
-    public final static String OCSP_PROPERTY = "OCSPPropery";
+public interface IOptionProperty<X> {
     
-    public OCSPProperty getOCSPProperty();
+    public X getOption();
     
-    public void setOCSPProperty(OCSPProperty ocsp);
+    public void setOption(X property);
 
-    public void setProperty(IOptionProperty property);
+    public void setProperty(IOptionProperty<X> property);
     
 }

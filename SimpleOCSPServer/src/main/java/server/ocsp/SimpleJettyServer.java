@@ -1,7 +1,7 @@
 package server.ocsp;
 
-import extend.util.CertUtil;
-import extend.util.Util;
+import extension.helpers.CertUtil;
+import extension.helpers.StringUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -200,7 +200,7 @@ public class SimpleJettyServer {
         public void doThrowable(HttpServletResponse response, Exception ex) throws IOException {
             StringBuilder errmsg = new StringBuilder();
             errmsg.append(ex.getMessage());
-            errmsg.append(Util.getStackTrace(ex));
+            errmsg.append(StringUtil.getStackTrace(ex));
             response.setContentType("text/plain");
             response.setStatus(HttpURLConnection.HTTP_INTERNAL_ERROR);
             response.setContentLength(errmsg.length());

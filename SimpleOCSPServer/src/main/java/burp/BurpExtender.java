@@ -1,13 +1,15 @@
 package burp;
 
+import extension.burp.BurpExtenderImpl;
+import extension.helpers.ConvertUtil;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import extend.util.ConvertUtil;
 import server.ocsp.Config;
 import server.ocsp.OCSPServerTab;
 import server.ocsp.IOptionProperty;
+import server.ocsp.OCSPProperty;
 import server.ocsp.OptionProperty;
 
 /**
@@ -20,6 +22,8 @@ public class BurpExtender extends BurpExtenderImpl {
     public BurpExtender() {
     }
 
+    private final java.util.ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("burp/resources/release");
+    
     @SuppressWarnings("unchecked")
     public static BurpExtender getInstance() {
         return BurpExtenderImpl.<BurpExtender>getInstance();
@@ -28,8 +32,9 @@ public class BurpExtender extends BurpExtenderImpl {
     private OCSPServerTab ocspTab;
 
     @Override
-    public void registerExtenderCallbacks(IBurpExtenderCallbacks cb) {
-        super.registerExtenderCallbacks(cb);
+    public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) {
+        super.registerExtenderCallbacks(callbacks);
+        callbacks.setExtensionName(String.format("%s v%s", BUNDLE.getString("projname"), BUNDLE.getString("version")));
 
         // 設定ファイル読み込み
         String configJSON = getCallbacks().loadExtensionSetting("configJSON");
@@ -41,18 +46,18 @@ public class BurpExtender extends BurpExtenderImpl {
             }
         }
         this.ocspTab = new OCSPServerTab();
-        this.ocspTab.setOCSPProperty(this.option.getOCSPProperty());
+        this.ocspTab.setOCSPProperty(this.option.getOption());
         this.ocspTab.addPropertyChangeListener(newPropertyChangeListener());
-        cb.addSuiteTab(this.ocspTab);
-        cb.registerExtensionStateListener(this.ocspTab);
+        callbacks.addSuiteTab(this.ocspTab);
+        callbacks.registerExtensionStateListener(this.ocspTab);
     }
 
     public PropertyChangeListener newPropertyChangeListener() {
         return new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                if (IOptionProperty.OCSP_PROPERTY.equals(evt.getPropertyName())) {
-                    getProperty().setOCSPProperty(ocspTab.getOCSPProperty());
+                if (OptionProperty.OCSP_PROPERTY.equals(evt.getPropertyName())) {
+                    getProperty().setOption(ocspTab.getOCSPProperty());
                     applyOptionProperty();
                 }
             }
@@ -65,7 +70,7 @@ public class BurpExtender extends BurpExtenderImpl {
         return this.option;
     }
 
-    public void setProperty(IOptionProperty property) {
+    public void setProperty(OptionProperty property) {
         this.option.setProperty(property);
     }
 

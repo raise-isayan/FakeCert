@@ -167,24 +167,35 @@ Extenders in the Burp suite can be loaded as follows
 * v2020.2 (last version)
 
 ## development environment
-* NetBeans 12.0 (https://netbeans.apache.org/)
+* NetBeans 12.2 (https://netbeans.apache.org/)
 
 ## build
 Build with NetBeans or build with meven.
 
+## Required library
+Building requires a [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) library.
+* BurpExtlib v2.1.2.1
+
 ## Library
-* Jassist 3.26.0 (Mozilla Public License Version 1.1, GNU Lesser General Public License Version 2.1, Apache License Version 2.0)
-    * https://github.com/jboss-javassist/javassist
-* BouncyCastle 1.6.1 (MIT license)
-    * https://www.bouncycastle.org/license.html
-* Jetty 9 (Apache License 2.0, Eclipse Public License 1.0)
-    * https://www.eclipse.org/jetty/licenses.html
-* Google gson 2.8.5 (Apache License 2.0)
-    * https://github.com/google/gson/
-* Use Icon (Creative Commons Attribution 2.5 License)
-    * http://www.famfamfam.com/lab/icons/silk/
-* BurpExtlib v2.0.14
-    * Burp Extension common library
+* Jassist 3.26.0 (https://www.javassist.org/)
+  * Mozilla Public License Version 1.1, GNU Lesser General Public License Version 2.1, Apache License Version 2.0
+  * https://github.com/jboss-javassist/javassist
+
+* BouncyCastle 1.6.1 (http://bouncycastle.org/)
+  * MIT license
+  * https://www.bouncycastle.org/license.html
+
+* Jetty 9 (https://www.eclipse.org/jetty/)
+  * Apache License 2.0, Eclipse Public License 1.0
+  * https://www.eclipse.org/jetty/licenses.html
+
+* Google gson 2.8.5 (https://github.com/google/gson)
+  * Apache License 2.0
+  * https://github.com/google/gson/
+
+* Use Icon (http://www.famfamfam.com/lab/icons/silk/)
+  * Creative Commons Attribution 2.5 License
+  * http://www.famfamfam.com/lab/icons/silk/
 
 ## Note
 This tool was developed by me personally and PortSwigger is not affiliated with it in any way. Please do not ask PortSwigger about any problems caused by using this tool.

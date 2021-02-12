@@ -3,9 +3,9 @@ package server.ocsp;
 import burp.BurpExtender;
 import burp.IExtensionStateListener;
 import burp.ITab;
-import extend.util.CertUtil;
-import extend.util.SwingUtil;
-import extend.util.Util;
+import extension.helpers.CertUtil;
+import extension.helpers.StringUtil;
+import extension.helpers.SwingUtil;
 import java.awt.Component;
 import java.awt.TrayIcon;
 import java.io.ByteArrayInputStream;
@@ -290,31 +290,31 @@ public class OCSPServerTab extends javax.swing.JPanel
                     this.thredServer.startServer(issuerPrivateKey, issuerCert, (int) this.spnListenPort.getValue());
                 } catch (FileNotFoundException ex) {
                     JOptionPane.showMessageDialog(this, "File not found:" + this.txtCAFile.getText(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                     logger.log(Level.SEVERE, null, ex);
                 } catch (KeyStoreException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                     logger.log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                     logger.log(Level.SEVERE, null, ex);
                 } catch (UnrecoverableKeyException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                     logger.log(Level.SEVERE, null, ex);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
-                    BurpExtender.issueAlert(getTabCaption(), Util.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
+                    BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
                     logger.log(Level.SEVERE, null, ex);
                 }
@@ -339,20 +339,20 @@ public class OCSPServerTab extends javax.swing.JPanel
     }//GEN-LAST:event_btnServerStartActionPerformed
 
     private void spnListenPortStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnListenPortStateChanged
-        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_spnListenPortStateChanged
 
     private void rdoBurpCAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rdoBurpCAStateChanged
-        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_rdoBurpCAStateChanged
 
     private void rdoCustomCAStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_rdoCustomCAStateChanged
         SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
-        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_rdoCustomCAStateChanged
 
     private void chkAutoStartStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_chkAutoStartStateChanged
-        this.firePropertyChange(IOptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
+        this.firePropertyChange(OptionProperty.OCSP_PROPERTY, null, this.getOCSPProperty());
     }//GEN-LAST:event_chkAutoStartStateChanged
 
     private final static FileFilter FILTER_PKCS12 = new FileNameExtensionFilter("certificate file(*.p12;*.pfx)", "p12", "pfx");
@@ -407,8 +407,8 @@ public class OCSPServerTab extends javax.swing.JPanel
     }
 
     private void customizeComponents() {
-        IOptionProperty option = BurpExtender.getInstance().getProperty();
-        OCSPProperty ocsp = option.getOCSPProperty();
+        IOptionProperty<OCSPProperty> option = BurpExtender.getInstance().getProperty();
+        OCSPProperty ocsp = option.getOption();
         if (ocsp.isAutoStart()) {
             this.btnServerStart.doClick();
         }

@@ -6,24 +6,25 @@ import com.google.gson.annotations.Expose;
  *
  * @author raise.isayan
  */
-public final class OptionProperty implements IOptionProperty {
- 
+public final class OptionProperty implements IOptionProperty<OCSPProperty> {
+    public final static String OCSP_PROPERTY = "OCSPPropery";
+
+    @Override
+    public void setProperty(IOptionProperty<OCSPProperty> property) {
+        this.setOption(property.getOption());
+    }
+
     @Expose
     private final OCSPProperty ocsp = new OCSPProperty();
-
-    @Override
-    public OCSPProperty getOCSPProperty() {
-        return this.ocsp;
-    }
     
     @Override
-    public void setOCSPProperty(OCSPProperty ocsp) {
-        this.ocsp.setProperty(ocsp);
+    public OCSPProperty getOption() {
+        return this.ocsp;
     }
 
     @Override
-    public void setProperty(IOptionProperty property) {
-        this.setOCSPProperty(property.getOCSPProperty());
+    public void setOption(OCSPProperty property) {
+        this.ocsp.setProperty(ocsp);
     }
     
 }

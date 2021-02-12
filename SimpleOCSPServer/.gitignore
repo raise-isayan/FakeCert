@@ -1,3 +1,3 @@
-/target
-/nbproject/private
+/.gradle
+/build
 *.zip
