@@ -30,7 +30,7 @@ clean.doFirst {
 
 jar {
     // Keep jar clean:
-    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF', 'META-INF/**', 'about.html', 'module-info.class'
     
     manifest {
         attributes 'Main-Class': mainClassName
@@ -66,7 +66,7 @@ dependencies {
     // https://mvnrepository.com/artifact/net.portswigger.burp.extender/burp-extender-api
     compileOnly 'net.portswigger.burp.extender:burp-extender-api:2.1'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    compileOnly 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.6'
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server 
     implementation 'org.eclipse.jetty:jetty-server:9.4.32.v20200930'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on 

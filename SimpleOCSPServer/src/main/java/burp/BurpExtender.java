@@ -6,10 +6,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import server.ocsp.Config;
 import server.ocsp.OCSPServerTab;
-import server.ocsp.IOptionProperty;
-import server.ocsp.OCSPProperty;
 import server.ocsp.OptionProperty;
 
 /**
@@ -34,19 +31,21 @@ public class BurpExtender extends BurpExtenderImpl {
     @Override
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) {
         super.registerExtenderCallbacks(callbacks);
-        callbacks.setExtensionName(String.format("%s v%s", BUNDLE.getString("projname"), BUNDLE.getString("version")));
+//        callbacks.setExtensionName(String.format("%s v%s", BUNDLE.getString("projname"), BUNDLE.getString("version")));
+        callbacks.setExtensionName(String.format("%s", BUNDLE.getString("projname")));
 
         // 設定ファイル読み込み
         String configJSON = getCallbacks().loadExtensionSetting("configJSON");
         if (configJSON != null) {
             try {
-                Config.stringFromJson(ConvertUtil.decompressZlibBase64(configJSON), this.getProperty());
+                //Config.stringFromJson(ConvertUtil.decompressZlibBase64(configJSON), this.getProperty());
+                this.getProperty().stringFromJson(ConvertUtil.decompressZlibBase64(configJSON));
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         this.ocspTab = new OCSPServerTab();
-        this.ocspTab.setOCSPProperty(this.option.getOption());
+        this.ocspTab.setOCSPProperty(this.getProperty().getOption());
         this.ocspTab.addPropertyChangeListener(newPropertyChangeListener());
         callbacks.addSuiteTab(this.ocspTab);
         callbacks.registerExtensionStateListener(this.ocspTab);
@@ -76,7 +75,8 @@ public class BurpExtender extends BurpExtenderImpl {
 
     protected void applyOptionProperty() {
         try {
-            String configJSON = Config.stringToJson(this.getProperty());
+//            String configJSON = Config.stringToJson(this.getProperty());
+            String configJSON = this.getProperty().stringToJson();
             getCallbacks().saveExtensionSetting("configJSON", ConvertUtil.compressZlibBase64(configJSON));
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);

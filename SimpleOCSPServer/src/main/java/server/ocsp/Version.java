@@ -37,16 +37,11 @@ public final class Version extends ICustomVersion {
     }
     
     private final static String VERSION_INFO_FMT = 
-            "Product Version: %s %s\n" + 
-            "Log Dir: %s\n" +
-            "Config Dir: %s\n";    
+            "Product Version: %s %s\n";    
 
     public String getVersionInfo() {
-        return String.format(VERSION_INFO_FMT,
-            getProjectName(),
-            Version.getInstance().getVersion(), 
-            Config.getUserDirPath(),
-            Config.getExtensionHomeFile().getAbsoluteFile());    
+        return String.format(VERSION_INFO_FMT, 
+                getProjectName(), Version.getInstance().getVersion());
     }
     
 }

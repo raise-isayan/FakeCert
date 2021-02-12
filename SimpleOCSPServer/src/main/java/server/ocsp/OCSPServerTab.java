@@ -6,6 +6,7 @@ import burp.ITab;
 import extension.helpers.CertUtil;
 import extension.helpers.StringUtil;
 import extension.helpers.SwingUtil;
+import extension.view.base.IOptionProperty;
 import java.awt.Component;
 import java.awt.TrayIcon;
 import java.io.ByteArrayInputStream;
