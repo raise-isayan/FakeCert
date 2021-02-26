@@ -70,11 +70,11 @@ CN=www\.example\.com(,$)	x509.info.extensions.AuthorityInfoAccess.ocsp	http://ww
     * 証明書のsubject ... 変更後のSubjectを記載。CNについても変更可能です。
 
 * x509.info.serialNumber
-    * 証明書のserialNumber ... 16進数で記載
+    * 証明書のserialNumber ... 16進数で記載します。
 
 * x509.info.validity
     * 証明書の有効期限 ... [dateFormatPattern] [fromDate] [toDate]の順で記載。各項目はタブ区切りです。
-         * dateFormatPattern ... SimpleDateFormatにて利用可能な日付フォーマットを指定可能
+         * dateFormatPattern ... SimpleDateFormatにて利用可能な日付フォーマットを指定可能です。
          * fromDate ... 開始日(日付フォーマットの書式にて記載)
          * toDate ... 終了日(日付フォーマットの書式にて記載)
 
@@ -166,11 +166,16 @@ Burp suite の Extenderは以下の手順で読み込めます。
 * NetBeans 12.2 (https://netbeans.apache.org/)
 
 ## ビルド
-NetBeans にてビルドもしくは meven にてビルドします。
+NetBeans にてビルドもしくは gradle にてビルドします。
+
+
+```
+gradlew release
+```
 
 ## 必須ライブラリ
-ビルドには別途 [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) のライブラリを必要とします。
-* BurpExtlib v2.1.2.0
+ビルドには別途 [BurpExtensionCommons](https://github.com/raise-isayan/BurpExtensionCommons) のライブラリを必要とします。
+* BurpExtensionCommons v0.4.1.0
 
 ## 利用ライブラリ
 * Jassist 3.26.0 (https://www.javassist.org/)

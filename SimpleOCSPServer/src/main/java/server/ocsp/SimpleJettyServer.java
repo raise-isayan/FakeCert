@@ -40,10 +40,10 @@ public class SimpleJettyServer {
 
     public SimpleJettyServer() {
     }
-    
+
     private boolean debug = false;
     private Server server = null;
-    
+
     /**
      * @return the debug
      */
@@ -57,15 +57,15 @@ public class SimpleJettyServer {
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
-        
-    
+
+
     public void startServer(PrivateKey issuerPrivateKey, X509Certificate issuerCert, int listenPort) throws Exception {
         System.out.println("start listen port:" + listenPort);
         this.server = createServer(listenPort);
 
         ContextHandler contextRoot = new ContextHandler("/");
-        contextRoot.setHandler(new MyHandler(issuerPrivateKey, issuerCert));        
-    
+        contextRoot.setHandler(new MyHandler(issuerPrivateKey, issuerCert));
+
         ContextHandlerCollection contexts = new ContextHandlerCollection();
         contexts.setHandlers(new Handler[] { contextRoot });
 
@@ -85,10 +85,10 @@ public class SimpleJettyServer {
             } catch (InterruptedException ex) {
                 logger.log(Level.SEVERE, null, ex);
             }
-        }            
+        }
     }
-    
-    
+
+
     public void stopServer() {
         if (this.server != null) {
             try {
@@ -99,7 +99,7 @@ public class SimpleJettyServer {
         }
         this.server = null;
     }
-    
+
     private static void usage() {
         System.out.println("");
         System.out.println(String.format("Usage: java -jar %s.jar [option] <-cafile=<pkcs12>> <-password=<pkcs12 password>> [-port=<listen port>]", SimpleJettyServer.class.getSimpleName()));
@@ -139,7 +139,7 @@ public class SimpleJettyServer {
                 doThrowable(response, ex);
             }
         }
-        
+
         public void doGet(Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
             String uri = baseRequest.getRequestURI();
             if (uri.equals("/")) {
@@ -169,24 +169,24 @@ public class SimpleJettyServer {
             response.setContentType("text/html");
             response.setStatus(HttpURLConnection.HTTP_OK);
             try (PrintStream os = new PrintStream(response.getOutputStream())) {
-                    os.println("<html>" +
-                                "<p>Success</p>" +
-                                "<p>Support RFC2560</p>" +
-                                "<p><strong>GET</strong>" +
-                                "<pre><code>GET {url}/{url-encoding of base-64 encoding of the DER encoding of the OCSPRequest}</code></pre>" +
-                                "<p><strong>POST</strong>" +
-                                "<pre><code>POST {url}/" +
-                                "Host: 192.0.2.11" +
-                                "Content-Length: ..." +
-                                "" +
-                                "{DER encoding of the OCSPRequest}</code></pre>" +
-                                "" +
-                                "<p><strong>GET/POST Response</strong>" +
-                                "<pre><code>{CertStatus returns only Good}</code></pre>" +
-                                "</html>");
+                os.println("<html>" +
+                            "<p>Success</p>" +
+                            "<p>Support RFC2560</p>" +
+                            "<p><strong>GET</strong>" +
+                            "<pre><code>GET {url}/{url-encoding of base-64 encoding of the DER encoding of the OCSPRequest}</code></pre>" +
+                            "<p><strong>POST</strong>" +
+                            "<pre><code>POST {url}/ HTTP/1.1\n" +
+                            "Host: 192.0.2.11\n" +
+                            "Content-Length: ...\n" +
+                            "\n" +
+                            "{DER encoding of the OCSPRequest}</code></pre>" +
+                            "" +
+                            "<p><strong>GET/POST Response</strong>" +
+                            "<pre><code>{CertStatus returns only Good}</code></pre>" +
+                            "</html>");
             }
         }
-                
+
         public void doResponse(HttpServletResponse response, byte[] ocspRequest) throws IOException {
             byte[] resp = OCSPWrap.genOCSPRespEncoded(ocspRequest, issuerPrivateKey, issuerCert);
             response.setContentType("application/ocsp-response");
@@ -211,9 +211,8 @@ public class SimpleJettyServer {
         }
 
     }
-        
-    public static Server createServer(int port)
-    {
+
+    public static Server createServer(int port) {
         Server server = new Server();
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
@@ -266,7 +265,7 @@ public class SimpleJettyServer {
                         alias = param[1];
                     } else if ("-port".equals(param[0])) {
                         defaultPort = Integer.parseInt(param[1]);
-                    }                
+                    }
                 }
             }
 
@@ -308,7 +307,7 @@ public class SimpleJettyServer {
             server.setDebug(debug);
             server.startServer(issuerPrivateKey, issuerCert, defaultPort);
             server.joinServer();
-                    
+
         } catch (Exception ex) {
             String errmsg = String.format("%s: %s", ex.getClass().getName(), ex.getMessage());
             System.out.println(errmsg);
@@ -316,5 +315,5 @@ public class SimpleJettyServer {
             usage();
         }
     }
-    
+
 }

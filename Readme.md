@@ -44,7 +44,7 @@ java -javaagent:FakeBurpCert.jar -Xmx1024m -jar burpsuite_free_v1.7.06.jar
 The cert.txt file contains the rules for changing the certificate.
 
 This file is described in the following format.
-The character code must be written in UTF-8.
+Note that the character encoding must be UTF-8.
 
 
 ```
@@ -71,10 +71,10 @@ The types of fields that can be specified in the 2 column are as follows
     *  Certificate subject ... The subject of the modified certificate, which can be changed for CN.
 
 * x509.info.serialNumber
-    * Certificate serialNumber ... Listed in hexadecimal.
+    * Certificate serialNumber ... Hexadecimal notation..
 
 * x509.info.validity
-    * Certificate Expiration Date ... Listed in the order of [dateFormatPattern] [fromDate] [toDate].
+    * Certificate Expiration Date ... [dateFormatPattern] [fromDate] [toDate] in that order.
       Each item is tab-delimited.
          * dateFormatPattern ... Allows you to specify the date formats available in SimpleDateFormat
          * fromDate ...  Start date (in date format)
@@ -170,11 +170,15 @@ Extenders in the Burp suite can be loaded as follows
 * NetBeans 12.2 (https://netbeans.apache.org/)
 
 ## build
-Build with NetBeans or build with meven.
+Build with NetBeans or build with gradle.
+
+```
+gradlew release
+```
 
 ## Required library
-Building requires a [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) library.
-* BurpExtlib v2.1.2.1
+Building requires a [BurpExtensionCommons](https://github.com/raise-isayan/BurpExtensionCommons) library.
+* BurpExtensionCommons v0.4.1.0
 
 ## Library
 * Jassist 3.26.0 (https://www.javassist.org/)
@@ -204,7 +208,7 @@ Building requires a [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) lib
 ## Note
 This tool was developed by me personally and PortSwigger is not affiliated with it in any way. Please do not ask PortSwigger about any problems caused by using this tool.
 
-This tool internally modifies the bytecode of the Java Runtime Environment, when used with Oracle's Java Runtime Environment [Binary Code License] (http://www.oracle.com/technetwork/java/javase/terms/license /index.html). We recommend that you check the license and run the program on a Java runtime 
+This tool internally modifies the bytecode of the Java Runtime Environment, when used with Oracle's Java Runtime Environment [Binary Code License] (http://www.oracle.com/technetwork/java/javase/terms/license/index.html). We recommend that you check the license and run the program on a Java runtime 
 
 ## thanks
 The idea for this tool was inspired by [Belle (Unofficial Burp Suite)](https://github.com/ankokuty/Belle).
