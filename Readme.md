@@ -181,6 +181,14 @@ Building requires a [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) lib
   * Mozilla Public License Version 1.1, GNU Lesser General Public License Version 2.1, Apache License Version 2.0
   * https://github.com/jboss-javassist/javassist
 
+* Google gson 2.8.5 (https://github.com/google/gson)
+  * Apache License 2.0
+  * https://github.com/google/gson/
+
+* Universal Chardet for java (https://code.google.com/archive/p/juniversalchardet/)
+  * MPL 1.1
+  * https://code.google.com/archive/p/juniversalchardet/
+
 * BouncyCastle 1.6.1 (http://bouncycastle.org/)
   * MIT license
   * https://www.bouncycastle.org/license.html
@@ -188,10 +196,6 @@ Building requires a [BurpExtLib](https://github.com/raise-isayan/BurpExtLib) lib
 * Jetty 9 (https://www.eclipse.org/jetty/)
   * Apache License 2.0, Eclipse Public License 1.0
   * https://www.eclipse.org/jetty/licenses.html
-
-* Google gson 2.8.5 (https://github.com/google/gson)
-  * Apache License 2.0
-  * https://github.com/google/gson/
 
 * Use Icon (http://www.famfamfam.com/lab/icons/silk/)
   * Creative Commons Attribution 2.5 License

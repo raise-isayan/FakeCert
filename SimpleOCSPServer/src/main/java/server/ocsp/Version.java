@@ -1,14 +1,14 @@
 package server.ocsp;
 
 import extension.burp.BurpConfig;
-import extension.view.base.ICustomVersion;
+import extension.view.base.CustomVersion;
 
 
 /**
  *
  * @author isayan
  */
-public final class Version extends ICustomVersion {
+public final class Version extends CustomVersion {
 
     private final java.util.ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("burp/resources/release");
 
