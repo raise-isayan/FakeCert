@@ -25,7 +25,9 @@ processResources {
 }
 
 clean.doFirst {
-    delete 'release';
+    delete fileTree('release') {
+      include '*.jar'
+    }
 }
 
 jar {

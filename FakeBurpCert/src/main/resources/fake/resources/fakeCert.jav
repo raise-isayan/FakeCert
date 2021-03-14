@@ -41,35 +41,35 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
                         sun.security.x509.SubjectAlternativeNameExtension san = (sun.security.x509.SubjectAlternativeNameExtension) ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME);
                         if (san == null) {
                             if (!value.isEmpty()) {
-                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
-                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
-                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));                            
-                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
+                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);
+                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
+                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);
                             }
                         }
                         else {
                             sun.security.x509.GeneralNames alternativeNames = san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
                             if (alternativeNames == null) {
-                                alternativeNames = new sun.security.x509.GeneralNames();                            
+                                alternativeNames = new sun.security.x509.GeneralNames();
                             }
                             if (key.endsWith(".clear")) {
-                                alternativeNames = new sun.security.x509.GeneralNames();  
+                                alternativeNames = new sun.security.x509.GeneralNames();
                                 if (ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME) != null) ext.delete(sun.security.x509.SubjectAlternativeNameExtension.NAME);
                                 if (san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) san.delete(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
                             }
                             if (!value.isEmpty()) {
-                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);
                                 alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
                             }
                             if (alternativeNames.size() > 0) {
-                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);                                                
+                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);
                             }
                         }
-                        if (san != null && san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) {                    
+                        if (san != null && san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) {
                             ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
                         }
                         if (ext.getElements().hasMoreElements()) {
-                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);                    
+                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);
                         }
                         else {
                             if (certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS) != null) certInfo.delete(sun.security.x509.X509CertInfo.EXTENSIONS);

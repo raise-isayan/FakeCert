@@ -2,9 +2,9 @@ Burp suite 証明書変更ツール
 =============
 Language/[English](Readme.md)
 
-このツールは、PortSwigger社の製品であるBurp Suiteが動的に生成する証明書の変更や含まれていない情報を追加するためのツールです。
+このツールは、PortSwigger社のBurp Suiteが動的に生成する証明書の変更や含まれていない情報を追加するためのツールです。
 
-本ツールには２つのプロジェクトが含まれています。
+本ツールには2つのプロジェクトが含まれています。
 
 FakeBurpCert
 _____________
@@ -33,7 +33,7 @@ _____________
 * cert.txt
 * javassist.jar
 
-Burp suiteのjarファイルがあるフォルダに移動し、(-jar オプションより前に) -javaagentコマンドラインオプションを指定して起動します。
+Burp suiteのjarファイルがあるフォルダにて、(-jar オプションより前に) -javaagentコマンドラインオプションを指定して起動します。
 
 ```
 java -javaagent:FakeBurpCert.jar -Xmx1024m -jar burpsuite_free_v1.7.06.jar
@@ -58,13 +58,13 @@ CN=www\.example\.com(,$)	x509.info.extensions.AuthorityInfoAccess.ocsp	http://ww
 
 各項目はタブ区切りとなっておりそれぞれ以下の値を設定します。
 
-１カラム目 : 変更を加えたい証明書のsubjectにマッチする正規表現を記載、マッチした場合に処理が行われます。
+1カラム目 : 変更を加えたい証明書のsubjectにマッチする正規表現を記載、マッチした場合に処理が行われます。
 
-２カラム目 : 追加もしくは更新するフィールドの種類を記載
+2カラム目 : 追加もしくは更新するフィールドの種類を記載
 
-３カラム目 : 追加もしくは更新する値
+3カラム目 : 追加もしくは更新する値
 
-２カラム目に指定できるフィールドの種類は以下になります。
+2カラム目に指定できるフィールドの種類は以下になります。
 
 * x509.info.subject
     * 証明書のsubject ... 変更後のSubjectを記載。CNについても変更可能です。

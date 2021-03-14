@@ -79,14 +79,15 @@ public class OCSPServerTab extends javax.swing.JPanel
             }
         });
 
-        chkAutoStart.setText("Automatic start at loading");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("server/ocsp/resources/Resource"); // NOI18N
+        chkAutoStart.setText(bundle.getString("server.ocsp.tab.auto_start")); // NOI18N
         chkAutoStart.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 chkAutoStartStateChanged(evt);
             }
         });
 
-        lblListenPort.setText("Listen port:");
+        lblListenPort.setText(bundle.getString("server.ocsp.tab.listen_port")); // NOI18N
 
         spnListenPort.setModel(new javax.swing.SpinnerNumberModel(8888, 1024, 65535, 1));
         spnListenPort.setEditor(new javax.swing.JSpinner.NumberEditor(spnListenPort, "#0"));
@@ -100,7 +101,7 @@ public class OCSPServerTab extends javax.swing.JPanel
 
         btnGrpCACertificate.add(rdoBurpCA);
         rdoBurpCA.setSelected(true);
-        rdoBurpCA.setText("Burp suite default CA");
+        rdoBurpCA.setText(bundle.getString("server.ocsp.tab.dafault_CA")); // NOI18N
         rdoBurpCA.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 rdoBurpCAStateChanged(evt);
@@ -108,7 +109,7 @@ public class OCSPServerTab extends javax.swing.JPanel
         });
 
         btnGrpCACertificate.add(rdoCustomCA);
-        rdoCustomCA.setText("Use custom CA file (pkcs12)");
+        rdoCustomCA.setText(bundle.getString("server.ocsp.tab.custom_CA")); // NOI18N
         rdoCustomCA.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 rdoCustomCAStateChanged(evt);
@@ -124,14 +125,14 @@ public class OCSPServerTab extends javax.swing.JPanel
 
         txtCApassword.setToolTipText("");
 
-        chkNonMaskPassword.setText("non mask password ");
+        chkNonMaskPassword.setText(bundle.getString("server.ocsp.tab.nonmask_password")); // NOI18N
         chkNonMaskPassword.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 chkNonMaskPasswordStateChanged(evt);
             }
         });
 
-        lblPassword.setText("password:");
+        lblPassword.setText(bundle.getString("server.ocsp.tab.password")); // NOI18N
 
         javax.swing.GroupLayout pnlCustomCALayout = new javax.swing.GroupLayout(pnlCustomCA);
         pnlCustomCA.setLayout(pnlCustomCALayout);
@@ -233,7 +234,9 @@ public class OCSPServerTab extends javax.swing.JPanel
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
+    private java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("server/ocsp/resources/Resource"); // NOI18N
+
     public KeyStore loadKeyStore() throws IOException, KeyStoreException {
         try {
             final KeyStore ks = KeyStore.getInstance("PKCS12");
@@ -325,13 +328,13 @@ public class OCSPServerTab extends javax.swing.JPanel
         }
         // Enable
         if (this.btnServerStart.isSelected()) {
-            this.btnServerStart.setText("Stop");
+            this.btnServerStart.setText(bundle.getString("server.ocsp.tab.stop"));
             this.spnListenPort.setEnabled(false);
             this.chkAutoStart.setEnabled(false);
             SwingUtil.setContainerEnable(this.pnlCaCertificate, false);
             SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
         } else {
-            this.btnServerStart.setText("Start");
+            this.btnServerStart.setText(bundle.getString("server.ocsp.tab.start"));
             this.spnListenPort.setEnabled(true);
             this.chkAutoStart.setEnabled(true);
             SwingUtil.setContainerEnable(this.pnlCaCertificate, true);
@@ -379,7 +382,6 @@ public class OCSPServerTab extends javax.swing.JPanel
         }
     }//GEN-LAST:event_chkNonMaskPasswordStateChanged
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGrpCACertificate;
     private javax.swing.JButton btnSelectCustomCA;
@@ -408,6 +410,7 @@ public class OCSPServerTab extends javax.swing.JPanel
     }
 
     private void customizeComponents() {
+        this.btnServerStart.setText(bundle.getString("server.ocsp.tab.start"));
         IOptionProperty<OCSPProperty> option = BurpExtender.getInstance().getProperty();
         OCSPProperty ocsp = option.getOption();
         if (ocsp.isAutoStart()) {

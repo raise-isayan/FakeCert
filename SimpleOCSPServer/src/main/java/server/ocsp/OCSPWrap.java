@@ -34,7 +34,7 @@ import org.bouncycastle.util.encoders.Base64;
  * @author isayan
  */
 public class OCSPWrap {
-    
+
     static {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
@@ -43,18 +43,18 @@ public class OCSPWrap {
 
     public OCSPWrap() {
     }
-    
+
     public static byte [] decodeOCSPUrl(String path) {
         try {
             String url = URLDecoder.decode(path, StandardCharsets.ISO_8859_1.name());
             byte [] b64 = Base64.decode(url);
-            return b64;        
+            return b64;
         } catch (UnsupportedEncodingException ex) {
-        
+
         }
-        return new byte [] {};        
+        return new byte [] {};
     }
-    
+
     public static byte[] genOCSPRespEncoded(byte[] ocspRequest, PrivateKey issuerPrivateKey, X509Certificate issuerCert) throws IOException {
         try {
             OCSPResp resp = genOCSPResp(ocspRequest, issuerPrivateKey, issuerCert);
@@ -63,14 +63,14 @@ public class OCSPWrap {
             throw new IOException(ex.getMessage(), ex);
         }
     }
-        
+
     protected  static OCSPResp genOCSPResp(byte [] ocspRequest, PrivateKey issuerPrivateKey, X509Certificate issuerCert) throws OCSPException, IOException {
         OCSPReq ocspReq = new OCSPReq(ocspRequest);
         Req[] reqIDList = ocspReq.getRequestList();
         OCSPResp resp = genOCSPResp(reqIDList, issuerPrivateKey, issuerCert);
         return resp;
     }
-        
+
     // final static AlgorithmIdentifier HASH_SHA256 = AlgorithmIdentifier.getInstance("2.16.840.1.101.3.4.2.1"); // SHA-256
     protected static OCSPResp genOCSPResp(Req[] reqIDList, PrivateKey issuerPrivateKey, X509Certificate issuerCert) throws OCSPException {
         OCSPResp ocspResp = null;
@@ -98,5 +98,5 @@ public class OCSPWrap {
         }
         return ocspResp;
     }
-       
+
 }

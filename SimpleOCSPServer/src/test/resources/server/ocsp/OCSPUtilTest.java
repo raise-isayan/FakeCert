@@ -6,9 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigInteger;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
+import java.util.logging.Logger;
 import org.bouncycastle.cert.ocsp.OCSPReq;
 import org.bouncycastle.cert.ocsp.OCSPResp;
 import org.bouncycastle.cert.ocsp.Req;
@@ -25,6 +27,7 @@ import static org.junit.Assert.*;
  * @author isayan
  */
 public class OCSPUtilTest {
+    private final static Logger logger = Logger.getLogger(OCSPUtilTest.class.getName());
 
     public OCSPUtilTest() {
     }
@@ -81,9 +84,9 @@ public class OCSPUtilTest {
         System.out.println("testDecodeOCSPUrl");
         String reqFileName = OCSPUtilTest.class.getResource("../../resources/req.der").getPath();
         byte[] buff = FileUtil.bytesFromFile(new File(reqFileName));
-        String ocspURL = URLEncoder.encode(Base64.toBase64String(buff), "8859_1");
+        String ocspURL = URLEncoder.encode(Base64.toBase64String(buff), StandardCharsets.ISO_8859_1);
         System.out.println("ocspURL:" + ocspURL);
-        assertEquals("MG8wbTBGMEQwQjAJBgUrDgMCGgUABBS8yTAf%2BzfS3dkE3w3iAWPnuQhToAQU%2FZW%2FipZVJr947vgLStV5ogOLEg4CCQDtMCIHicWhHaIjMCEwHwYJKwYBBQUHMAECBBIEEFHb1rA7VYnQLA6o0rruOps%3D", ocspURL);        
+        assertEquals("MG8wbTBGMEQwQjAJBgUrDgMCGgUABBS8yTAf%2BzfS3dkE3w3iAWPnuQhToAQU%2FZW%2FipZVJr947vgLStV5ogOLEg4CCQDtMCIHicWhHaIjMCEwHwYJKwYBBQUHMAECBBIEEFHb1rA7VYnQLA6o0rruOps%3D", ocspURL);
         byte[] decode = OCSPWrap.decodeOCSPUrl(ocspURL);
         assertArrayEquals(buff, decode);
     }
@@ -96,7 +99,7 @@ public class OCSPUtilTest {
         System.out.println("getURL");
         String uri = "/base64_encode";
         String[] paths = uri.split("/");
-        assertEquals("base64_encode", paths[paths.length - 1]);    
+        assertEquals("base64_encode", paths[paths.length - 1]);
     }
 
 }

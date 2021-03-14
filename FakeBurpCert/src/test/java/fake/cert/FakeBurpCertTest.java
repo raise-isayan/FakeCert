@@ -12,10 +12,10 @@ import static org.junit.Assert.*;
  * @author isayan
  */
 public class FakeBurpCertTest {
-    
+
     public FakeBurpCertTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
@@ -34,7 +34,7 @@ public class FakeBurpCertTest {
 
 
 /******************************************************************************/
-    
+
 public static java.util.Map createMap() {
     java.util.Map map = new java.util.LinkedHashMap();
     java.io.BufferedReader reader = null;
@@ -64,8 +64,8 @@ public static java.util.Map createMap() {
         }
     }
     return map;
-}    
-    
+}
+
 /******************************************************************************/
 
     org.bouncycastle.asn1.ASN1Integer              serialNumber;
@@ -95,7 +95,7 @@ public void burpCertInjection() {
                 if (key.equals("x509.info.subject")) {
                     String value = ((String)entry.getValue()).trim();
                     java.lang.System.out.println("\treplace_subject:[" + value + "]	");
-                    subject = new org.bouncycastle.asn1.x500.X500Name(value);                            
+                    subject = new org.bouncycastle.asn1.x500.X500Name(value);
                 } else if (key.equals("x509.info.serialNumber")) {
                     String value = ((String)entry.getValue()).trim();
                     serialNumber = new org.bouncycastle.asn1.ASN1Integer(new java.math.BigInteger(value, 16));
@@ -114,7 +114,7 @@ public void burpCertInjection() {
                         endDate  = new org.bouncycastle.asn1.x509.Time(toDate);
                     } catch (java.text.ParseException ex) {
                         ex.printStackTrace();
-                    }                        
+                    }
                 } else if (key.startsWith("x509.info.extensions.SubjectAlternativeName")) {
                     try {
                         String value = ((String)entry.getValue()).trim();
@@ -139,14 +139,14 @@ public void burpCertInjection() {
                             org.bouncycastle.asn1.x509.GeneralNames gns = org.bouncycastle.asn1.x509.GeneralNames.fromExtensions(extensions, org.bouncycastle.asn1.x509.Extension.subjectAlternativeName);
                             java.util.List dnsNameList = new java.util.ArrayList();
                             if (!key.endsWith(".clear")) {
-                                dnsNameList.addAll(java.util.Arrays.asList(gns.getNames()));                            
+                                dnsNameList.addAll(java.util.Arrays.asList(gns.getNames()));
                             }
                             if (!value.isEmpty()) {
                                 dnsNameList.add(new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.dNSName, value));
                             }
                             org.bouncycastle.asn1.x509.GeneralNames dnsNames = new org.bouncycastle.asn1.x509.GeneralNames((org.bouncycastle.asn1.x509.GeneralName[])dnsNameList.toArray(new org.bouncycastle.asn1.x509.GeneralName[dnsNameList.size()]));
-                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);                            
-                        }                            
+                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.subjectAlternativeName, false, dnsNames);
+                        }
                         extensions = extensionsGenerator.generate();
                     } catch (java.io.IOException ex) {
                         ex.printStackTrace();
@@ -173,7 +173,7 @@ public void burpCertInjection() {
                         else {
                            org.bouncycastle.asn1.x509.AuthorityInformationAccess authInfo = new org.bouncycastle.asn1.x509.AuthorityInformationAccess(org.bouncycastle.asn1.x509.AccessDescription.id_ad_ocsp, new org.bouncycastle.asn1.x509.GeneralName(org.bouncycastle.asn1.x509.GeneralName.uniformResourceIdentifier, value));
                            extensionsGenerator.addExtension(org.bouncycastle.asn1.x509.Extension.authorityInfoAccess, false, authInfo);
-                        }                            
+                        }
                         extensions = extensionsGenerator.generate();
                     } catch (java.io.IOException ex) {
                         ex.printStackTrace();
@@ -232,35 +232,35 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
                         sun.security.x509.SubjectAlternativeNameExtension san = (sun.security.x509.SubjectAlternativeNameExtension) ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME);
                         if (san == null) {
                             if (!value.isEmpty()) {
-                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();                            
-                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
-                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));                            
-                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);                            
+                                sun.security.x509.GeneralNames alternativeNames = new sun.security.x509.GeneralNames();
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);
+                                alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
+                                san = new sun.security.x509.SubjectAlternativeNameExtension(alternativeNames);
                             }
                         }
                         else {
                             sun.security.x509.GeneralNames alternativeNames = san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
                             if (alternativeNames == null) {
-                                alternativeNames = new sun.security.x509.GeneralNames();                            
+                                alternativeNames = new sun.security.x509.GeneralNames();
                             }
                             if (key.endsWith(".clear")) {
-                                alternativeNames = new sun.security.x509.GeneralNames();  
+                                alternativeNames = new sun.security.x509.GeneralNames();
                                 if (ext.get(sun.security.x509.SubjectAlternativeNameExtension.NAME) != null) ext.delete(sun.security.x509.SubjectAlternativeNameExtension.NAME);
                                 if (san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) san.delete(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME);
                             }
                             if (!value.isEmpty()) {
-                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);                                                                                 
+                                sun.security.x509.DNSName dnsName = new sun.security.x509.DNSName(value);
                                 alternativeNames.add(new sun.security.x509.GeneralName(dnsName));
                             }
                             if (alternativeNames.size() > 0) {
-                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);                                                
+                                san.set(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME, alternativeNames);
                             }
                         }
-                        if (san != null && san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) {                    
+                        if (san != null && san.get(sun.security.x509.SubjectAlternativeNameExtension.SUBJECT_NAME) != null) {
                             ext.set(sun.security.x509.SubjectAlternativeNameExtension.NAME, san);
                         }
                         if (ext.getElements().hasMoreElements()) {
-                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);                    
+                            certInfo.set(sun.security.x509.X509CertInfo.EXTENSIONS, ext);
                         }
                         else {
                             if (certInfo.get(sun.security.x509.X509CertInfo.EXTENSIONS) != null) certInfo.delete(sun.security.x509.X509CertInfo.EXTENSIONS);

@@ -19,7 +19,7 @@ public final class OptionProperty implements IOptionProperty<OCSPProperty> {
 
     @Expose
     private final OCSPProperty ocsp = new OCSPProperty();
-    
+
     public OCSPProperty getOption() {
         return this.ocsp;
     }
@@ -45,5 +45,5 @@ public final class OptionProperty implements IOptionProperty<OCSPProperty> {
         OptionProperty load = JsonUtil.jsonFromString(json, OptionProperty.class, true);
         this.setOption(load.getOption());
     }
-    
+
 }

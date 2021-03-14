@@ -20,17 +20,15 @@ processResources {
 }
 
 clean.doFirst {
-    delete 'release';
+    delete fileTree('release') {
+      include '*.jar'
+    }
 }
 
 jar {
     manifest {
         attributes 'Premain-Class': 'fake.cert.FakeBurpCert'
         attributes 'Boot-Class-Path': 'javassist.jar'
-    }
-
-    from {
-        configurations.runtimeClasspath.filter{ it.exists() }.collect { it.isDirectory() ? it : zipTree(it) }
     }
 
     destinationDirectory = file('release')

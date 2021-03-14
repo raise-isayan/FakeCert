@@ -15,12 +15,12 @@ import server.ocsp.OptionProperty;
  */
 public class BurpExtender extends BurpExtenderImpl {
    private final static Logger logger = Logger.getLogger(BurpExtender.class.getName());
- 
+
     public BurpExtender() {
     }
 
     private final java.util.ResourceBundle BUNDLE = java.util.ResourceBundle.getBundle("burp/resources/release");
-    
+
     @SuppressWarnings("unchecked")
     public static BurpExtender getInstance() {
         return BurpExtenderImpl.<BurpExtender>getInstance();
@@ -75,7 +75,6 @@ public class BurpExtender extends BurpExtenderImpl {
 
     protected void applyOptionProperty() {
         try {
-//            String configJSON = Config.stringToJson(this.getProperty());
             String configJSON = this.getProperty().stringToJson();
             getCallbacks().saveExtensionSetting("configJSON", ConvertUtil.compressZlibBase64(configJSON));
         } catch (Exception ex) {
