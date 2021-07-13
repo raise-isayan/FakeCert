@@ -3,7 +3,7 @@ apply plugin: 'jacoco'
 apply plugin: 'application'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceCompatibility = '11' // -source
@@ -75,9 +75,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
     implementation 'org.eclipse.jetty:jetty-server:9.4.32.v20200930'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.61'
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.64'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.64'
 
     // UnitTest
     testImplementation fileTree(dir: 'libs', include: ['*.jar'])

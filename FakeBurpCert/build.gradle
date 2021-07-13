@@ -3,7 +3,7 @@ apply plugin: 'jacoco'
 apply plugin: 'application'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceCompatibility = '1.8' // -source
@@ -52,14 +52,14 @@ task release(type: Zip, dependsOn: ['build']) {
 }
 
 dependencies {
-    // https://github.com/raise-isayan/BurpExtlib
+    // javassist.jar
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // UnitTest
     // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
-    testImplementation 'org.bouncycastle:bcpkix-jdk15on:1.61'
+    testImplementation 'org.bouncycastle:bcpkix-jdk15on:1.64'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-    testImplementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+    testImplementation 'org.bouncycastle:bcprov-jdk15on:1.64'
     testImplementation     'junit:junit:4.13'
 
 }
