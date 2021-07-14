@@ -35,8 +35,7 @@ public final class Version extends CustomVersion {
         return projname;
     }
 
-    private final static String VERSION_INFO_FMT =
-            "Product Version: %s %s\n";
+    private final static String VERSION_INFO_FMT = "Product Version: %s %s\n";
 
     public String getVersionInfo() {
         return String.format(VERSION_INFO_FMT,

@@ -83,7 +83,7 @@ public class SimpleJettyServer {
             try {
                 this.server.join();
             } catch (InterruptedException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
     }
@@ -94,7 +94,7 @@ public class SimpleJettyServer {
             try {
                 this.server.stop();
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, null, ex);
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         this.server = null;
@@ -207,7 +207,7 @@ public class SimpleJettyServer {
             try (PrintStream os = new PrintStream(response.getOutputStream())) {
                 os.println(errmsg.toString());
             }
-            logger.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
 
     }

@@ -166,7 +166,7 @@ Extenders in the Burp suite can be loaded as follows
 * v2020.2 (last version)
 
 ## development environment
-* NetBeans 12.2 (https://netbeans.apache.org/)
+* NetBeans 12.4 (https://netbeans.apache.org/)
 
 ## build
 Build with NetBeans or build with gradle.
@@ -192,7 +192,7 @@ Building requires a [BurpExtensionCommons](https://github.com/raise-isayan/BurpE
   * MPL 1.1
   * https://code.google.com/archive/p/juniversalchardet/
 
-* BouncyCastle 1.6.1 (http://bouncycastle.org/)
+* BouncyCastle 1.6.4 (http://bouncycastle.org/)
   * MIT license
   * https://www.bouncycastle.org/license.html
 

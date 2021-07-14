@@ -300,27 +300,27 @@ public class OCSPServerTab extends javax.swing.JPanel
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    logger.log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, ex.getMessage(), ex);
                 } catch (KeyStoreException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    logger.log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, ex.getMessage(), ex);
                 } catch (NoSuchAlgorithmException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    logger.log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, ex.getMessage(), ex);
                 } catch (UnrecoverableKeyException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    logger.log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, ex.getMessage(), ex);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), getTabCaption(), JOptionPane.ERROR_MESSAGE);
                     BurpExtender.issueAlert(getTabCaption(), StringUtil.getStackTraceMessage(ex), TrayIcon.MessageType.ERROR);
                     this.btnServerStart.setSelected(false);
-                    logger.log(Level.SEVERE, null, ex);
+                    logger.log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
         } else {

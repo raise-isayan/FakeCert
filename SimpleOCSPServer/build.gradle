@@ -66,7 +66,7 @@ dependencies {
     // https://github.com/raise-isayan/BurpExtlib
     implementation fileTree(dir: 'libs', include: ['*.jar'])
         // https://mvnrepository.com/artifact/com.google.code.gson/gson
-        implementation 'com.google.code.gson:gson:2.8.6'
+        implementation 'com.google.code.gson:gson:2.8.7'
         // https://mvnrepository.com/artifact/com.googlecode.juniversalchardet/juniversalchardet
         implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
 
@@ -85,6 +85,6 @@ dependencies {
     testImplementation 'net.portswigger.burp.extender:burp-extender-api:2.1'
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-client
     testImplementation 'org.eclipse.jetty:jetty-client:9.4.32.v20200930'
-    testImplementation     'junit:junit:4.13.1'
+    testImplementation     'junit:junit:4.13.2'
 
 }

@@ -163,7 +163,7 @@ Burp suite の Extenderは以下の手順で読み込めます。
 * v2020.2 (最終確認バージョン)
 
 ## 開発環境
-* NetBeans 12.2 (https://netbeans.apache.org/)
+* NetBeans 12.4 (https://netbeans.apache.org/)
 
 ## ビルド
 NetBeans にてビルドもしくは gradle にてビルドします。
@@ -175,7 +175,7 @@ gradlew release
 
 ## 必須ライブラリ
 ビルドには別途 [BurpExtensionCommons](https://github.com/raise-isayan/BurpExtensionCommons) のライブラリを必要とします。
-* BurpExtensionCommons v0.4.1.0
+* BurpExtensionCommons v0.4.x
 
 ## 利用ライブラリ
 * Jassist 3.26.0 (https://www.javassist.org/)
@@ -190,7 +190,7 @@ gradlew release
   * MPL 1.1
   * https://code.google.com/archive/p/juniversalchardet/
 
-* BouncyCastle 1.6.1 (http://bouncycastle.org/)
+* BouncyCastle 1.6.4 (http://bouncycastle.org/)
   * MIT license
   * https://www.bouncycastle.org/license.html
 
