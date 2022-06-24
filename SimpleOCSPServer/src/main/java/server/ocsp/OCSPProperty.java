@@ -1,6 +1,8 @@
 package server.ocsp;
 
 import com.google.gson.annotations.Expose;
+import extension.burp.IPropertyConfig;
+import extension.helpers.json.JsonUtil;
 import java.io.File;
 
 /**

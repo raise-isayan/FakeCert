@@ -3,10 +3,11 @@ package server.ocsp;
 import burp.BurpExtender;
 import burp.IExtensionStateListener;
 import burp.ITab;
+import extension.burp.IPropertyConfig;
 import extension.helpers.CertUtil;
 import extension.helpers.StringUtil;
 import extension.helpers.SwingUtil;
-import extension.view.base.IOptionProperty;
+import extension.helpers.json.JsonUtil;
 import java.awt.Component;
 import java.awt.TrayIcon;
 import java.io.ByteArrayInputStream;
@@ -38,7 +39,7 @@ import server.ocsp.OCSPProperty.CACertificateType;
  * @author isayan
  */
 public class OCSPServerTab extends javax.swing.JPanel
-        implements ITab, IExtensionStateListener, UncaughtExceptionHandler {
+        implements ITab, IPropertyConfig, IExtensionStateListener, UncaughtExceptionHandler {
    private final static Logger logger = Logger.getLogger(OCSPServerTab.class.getName());
 
     /**
@@ -251,9 +252,7 @@ public class OCSPServerTab extends javax.swing.JPanel
                 ks.load(new FileInputStream(pkcs_ca), password.toCharArray());
                 return ks;
             }
-        } catch (NoSuchAlgorithmException ex) {
-            throw new IOException(ex);
-        } catch (CertificateException ex) {
+        } catch (NoSuchAlgorithmException | CertificateException ex) {
             throw new IOException(ex);
         }
     }
@@ -411,9 +410,7 @@ public class OCSPServerTab extends javax.swing.JPanel
 
     private void customizeComponents() {
         this.btnServerStart.setText(bundle.getString("server.ocsp.tab.start"));
-        IOptionProperty<OCSPProperty> option = BurpExtender.getInstance().getProperty();
-        OCSPProperty ocsp = option.getOption();
-        if (ocsp.isAutoStart()) {
+        if (this.isAutoStart()) {
             this.btnServerStart.doClick();
         }
         SwingUtil.setContainerEnable(this.pnlCustomCA, this.rdoCustomCA.isSelected());
@@ -445,6 +442,10 @@ public class OCSPServerTab extends javax.swing.JPanel
         return ocspProperty;
     }
 
+    private boolean isAutoStart() {
+        return this.chkAutoStart.isSelected();
+    }
+
     protected void stopThreadServer() {
         if (this.thredServer != null) {
             this.thredServer.stopServer();
@@ -455,6 +456,29 @@ public class OCSPServerTab extends javax.swing.JPanel
     @Override
     public void extensionUnloaded() {
         this.stopThreadServer();
+    }
+
+    @Override
+    public String getSettingName() {
+        return this.getClass().getName();
+    }
+
+    @Override
+    public void saveSetting(String value) {
+        OCSPProperty ocspProperty = JsonUtil.jsonFromString(value, OCSPProperty.class, true);
+        this.setOCSPProperty(ocspProperty);
+    }
+
+    @Override
+    public String loadSetting() {
+        OCSPProperty ocspProperty = this.getOCSPProperty();
+        return JsonUtil.jsonToString(ocspProperty, true);
+    }
+
+    @Override
+    public String defaultSetting() {
+        OCSPProperty ocspProperty = new OCSPProperty();
+        return JsonUtil.jsonToString(ocspProperty, true);
     }
 
 }

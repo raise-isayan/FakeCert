@@ -2,8 +2,11 @@ package burp;
 
 import extension.burp.BurpExtenderImpl;
 import extension.helpers.ConvertUtil;
+import extension.helpers.json.JsonUtil;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import server.ocsp.OCSPServerTab;
@@ -31,32 +34,30 @@ public class BurpExtender extends BurpExtenderImpl {
     @Override
     public void registerExtenderCallbacks(IBurpExtenderCallbacks callbacks) {
         super.registerExtenderCallbacks(callbacks);
-//        callbacks.setExtensionName(String.format("%s v%s", BUNDLE.getString("projname"), BUNDLE.getString("version")));
         callbacks.setExtensionName(String.format("%s", BUNDLE.getString("projname")));
 
         // 設定ファイル読み込み
+        Map<String, String> settings = this.option.loadConfigSetting();
         String configJSON = getCallbacks().loadExtensionSetting("configJSON");
         if (configJSON != null) {
-            try {
-                //Config.stringFromJson(ConvertUtil.decompressZlibBase64(configJSON), this.getProperty());
-                this.getProperty().stringFromJson(ConvertUtil.decompressZlibBase64(configJSON));
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, ex.getMessage(), ex);
-            }
+            settings = jsonStringToMap(ConvertUtil.decompressZlibBase64(configJSON));
         }
         this.ocspTab = new OCSPServerTab();
-        this.ocspTab.setOCSPProperty(this.getProperty().getOption());
+        String settingValue = settings.getOrDefault(this.ocspTab.getSettingName(), this.ocspTab.defaultSetting());
+        this.ocspTab.saveSetting(settingValue);
         this.ocspTab.addPropertyChangeListener(newPropertyChangeListener());
         callbacks.addSuiteTab(this.ocspTab);
         callbacks.registerExtensionStateListener(this.ocspTab);
     }
 
     public PropertyChangeListener newPropertyChangeListener() {
+        final Map<String, String> settings = this.option.loadConfigSetting();
         return new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (OptionProperty.OCSP_PROPERTY.equals(evt.getPropertyName())) {
-                    getProperty().setOption(ocspTab.getOCSPProperty());
+                    String settingValue = ocspTab.loadSetting();
+                    settings.put(ocspTab.getSettingName(), settingValue);
                     applyOptionProperty();
                 }
             }
@@ -69,17 +70,23 @@ public class BurpExtender extends BurpExtenderImpl {
         return this.option;
     }
 
-    public void setProperty(OptionProperty property) {
-        this.option.setProperty(property);
-    }
 
     protected void applyOptionProperty() {
         try {
-            String configJSON = this.getProperty().stringToJson();
+            final Map<String, String> settings = this.option.loadConfigSetting();
+            String configJSON = mapToJsonString(settings);
             getCallbacks().saveExtensionSetting("configJSON", ConvertUtil.compressZlibBase64(configJSON));
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 
+    public String mapToJsonString(Map<String, String> settings) {
+        return JsonUtil.jsonToString(settings, true);
+    }
+
+    public Map<String, String> jsonStringToMap(String json) {
+        final Map<String, String> settings = JsonUtil.jsonFromString(json, Map.class, true);
+        return settings;
+    }
 }
