@@ -60,6 +60,10 @@ dependencies {
     testImplementation 'org.bouncycastle:bcpkix-jdk15on:1.64'
     // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
     testImplementation 'org.bouncycastle:bcprov-jdk15on:1.64'
-    testImplementation     'junit:junit:4.13'
+
+    // Use JUnit Jupiter for testing.
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
 }
