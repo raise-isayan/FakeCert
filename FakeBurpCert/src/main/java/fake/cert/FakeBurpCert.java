@@ -30,7 +30,7 @@ public class FakeBurpCert {
             public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
                     ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
                 try {
-                    if (className != null && className.equals("sun/security/x509/X509CertImpl")) {
+                    if (className != null && className.equals("sun/security/x509/X509CertImpl") && isLinkage("sun/security/x509/X509CertImpl")) {
                         if (debug) {
                             System.out.println("className:" + className);
                         }
@@ -52,10 +52,11 @@ public class FakeBurpCert {
                         return ctClass.toBytecode();
                     } else if (className != null && className.equals("org/bouncycastle/asn1/x509/V3TBSCertificateGenerator")) {
                         if (debug) {
-                            System.out.println("className:" + className);
+                            System.out.println("found class:" + className);
                         }
                         CtClass ctClass = classPool.makeClass(new ByteArrayInputStream(classfileBuffer));
                         // 変換テーブル作成メソッドを追加
+                        String CREATE_MAP = buildResourceCommand(FAKE_CREATEMAP_COMMAND);
                         ctClass.addMethod(CtMethod.make(buildResourceCommand(FAKE_CREATEMAP_COMMAND), ctClass));
 
                         // 変換テーブルのフィールドを追加
@@ -84,7 +85,7 @@ public class FakeBurpCert {
 //                        if (className.startsWith("org/bouncycastle/")) {
 //                            System.out.println("className:" + className);
 //                        }
-                        System.out.println("className:" + className);
+//                        System.out.println("className:" + className);
                     }
 
                 } catch (Exception ex) {
@@ -99,6 +100,15 @@ public class FakeBurpCert {
 
         });
 
+    }
+
+    public static boolean isLinkage(String className) {
+        try {
+            Class.forName(className);
+        } catch (ClassNotFoundException ex) {
+            return false;
+        }
+        return true;
     }
 
     public final static String FAKE_CREATEMAP_COMMAND = "/fake/resources/createMap.jav";

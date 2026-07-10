@@ -35,6 +35,10 @@ jar {
     archiveVersion =  "v${release_version_major}"
 }
 
+tasks.withType(Test) {
+    systemProperty "file.encoding", "UTF-8"
+}
+
 task release(type: Zip, dependsOn: ['build']) {
     archiveBaseName ="${rootProject.name}_v${release_version_major}.${release_version_minor}"
     destinationDirectory = file("${projectDir}")
@@ -56,10 +60,10 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // UnitTest
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
-    testImplementation 'org.bouncycastle:bcpkix-jdk15on:1.64'
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
-    testImplementation 'org.bouncycastle:bcprov-jdk15on:1.64'
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on
+    testImplementation 'org.bouncycastle:bcpkix-jdk18on:1.84'
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on
+    testImplementation 'org.bouncycastle:bcprov-jdk18on:1.84'
 
     // Use JUnit Jupiter for testing.
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
