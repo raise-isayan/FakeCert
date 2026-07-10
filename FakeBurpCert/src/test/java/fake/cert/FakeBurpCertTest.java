@@ -76,6 +76,7 @@ public static java.util.Map createMap() {
     org.bouncycastle.asn1.x509.AlgorithmIdentifier     signature;
     org.bouncycastle.asn1.x500.X500Name                issuer;
     org.bouncycastle.asn1.x509.Time                    startDate, endDate;
+    org.bouncycastle.asn1.x509.Validity                 validity;
     org.bouncycastle.asn1.x500.X500Name                subject;
     org.bouncycastle.asn1.x509.SubjectPublicKeyInfo    subjectPublicKeyInfo;
     org.bouncycastle.asn1.x509.Extensions              extensions;
@@ -116,6 +117,7 @@ public void burpCertInjection() {
                         java.util.Date toDate = format.parse(list[2]);
                         startDate = new org.bouncycastle.asn1.x509.Time(fromDate);
                         endDate  = new org.bouncycastle.asn1.x509.Time(toDate);
+                        validity = null;
                     } catch (java.text.ParseException ex) {
                         ex.printStackTrace();
                     }
@@ -125,7 +127,7 @@ public void burpCertInjection() {
                         java.lang.System.out.println("\treplace_san:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();
-                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getCriticalExtensionOIDs();
+                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getExtensionOIDs();
                         // not SAN Exension
                         for (int k = 0; k < oids.length; k++) {
                             if (!org.bouncycastle.asn1.x509.Extension.subjectAlternativeName.equals(oids[i])) {
@@ -163,7 +165,7 @@ public void burpCertInjection() {
                         java.lang.System.out.println("ocsp:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();
-                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getCriticalExtensionOIDs();
+                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getExtensionOIDs();
                         for (int k = 0; k < oids.length; k++) {
                             if (!org.bouncycastle.asn1.x509.Extension.authorityInfoAccess.equals(oids[i])) {
                                 extensionsGenerator.addExtension(extensions.getExtension(oids[i]));
@@ -191,7 +193,7 @@ public void burpCertInjection() {
     }
 }
 
-/******************************************************************************/
+/******************************************************************************
 
 public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509.X509CertInfo certInfo) {
     java.util.Iterator iterator = translateMaps.keySet().iterator();
@@ -294,5 +296,5 @@ public static sun.security.x509.X509CertInfo burpCertInjection(sun.security.x509
     }
     return certInfo;
 }
-
+******************************************************************************/
 }

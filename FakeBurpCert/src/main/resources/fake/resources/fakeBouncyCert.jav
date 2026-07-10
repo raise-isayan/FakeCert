@@ -32,7 +32,8 @@ public void burpCertInjection() {
                         java.util.Date toDate = format.parse(list[2]);
                         startDate = new org.bouncycastle.asn1.x509.Time(fromDate);
                         endDate  = new org.bouncycastle.asn1.x509.Time(toDate);
-                    } catch (java.text.ParseException ex) {
+                        validity = null;
+                     } catch (java.text.ParseException ex) {
                         ex.printStackTrace();
                     }
                 } else if (key.startsWith("x509.info.extensions.SubjectAlternativeName")) {
@@ -41,7 +42,7 @@ public void burpCertInjection() {
                         java.lang.System.out.println("\treplace_san:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();
-                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getCriticalExtensionOIDs();
+                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getExtensionOIDs();
                         // not SAN Exension
                         for (int k = 0; k < oids.length; k++) {
                             if (!org.bouncycastle.asn1.x509.Extension.subjectAlternativeName.equals(oids[i])) {
@@ -79,7 +80,7 @@ public void burpCertInjection() {
                         java.lang.System.out.println("ocsp:" + value);
 
                         org.bouncycastle.asn1.x509.ExtensionsGenerator extensionsGenerator = new org.bouncycastle.asn1.x509.ExtensionsGenerator();
-                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getCriticalExtensionOIDs();
+                        org.bouncycastle.asn1.ASN1ObjectIdentifier [] oids = extensions.getExtensionOIDs();
                         for (int k = 0; k < oids.length; k++) {
                             if (!org.bouncycastle.asn1.x509.Extension.authorityInfoAccess.equals(oids[i])) {
                                 extensionsGenerator.addExtension(extensions.getExtension(oids[i]));
